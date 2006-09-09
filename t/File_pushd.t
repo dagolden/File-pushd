@@ -1,6 +1,6 @@
 # File::pushd - check module loading and create testing directory
 
-use Test::More tests =>  6 ;
+use Test::More tests =>  13 ;
 use Cwd qw( abs_path );
 use File::Spec;
 
@@ -15,20 +15,34 @@ can_ok( 'main', 'pushd' );
 # Setup
 #--------------------------------------------------------------------------#
 
+sub abscatdir {
+    return abs_path( File::Spec->catdir( @_ ) );
+}
+
+my ( $new_dir, $err );
 my $original_dir = abs_path();
 my $target_dir = 't';
-my $expected_dir 
-    = abs_path( File::Spec->catdir( $original_dir, $target_dir ) );
+my $expected_dir = abscatdir( $original_dir, $target_dir );
+my $nonexistant = abscatdir( $original_dir, 'DFASDFASDFASDFAS' );
 
 #--------------------------------------------------------------------------#
-# Test changing to relative directory
+# Test error handling on bad target
 #--------------------------------------------------------------------------#
 
-my $new_dir = pushd($target_dir);
+eval { $new_dir = pushd($nonexistant) };
+$err = $@;
+like( $@, qr/\ACouldn't chdir to nonexistant directory $nonexistant/,
+    "pushd to nonexistant directory croaks" );
+
+#--------------------------------------------------------------------------#
+# Test changing to relative path directory
+#--------------------------------------------------------------------------#
+
+$new_dir = pushd($target_dir);
 
 isa_ok( $new_dir, 'File::pushd' );
 
-is( abs_path(), $expected_dir, "change directory on pushd (relative)" );
+is( abs_path(), $expected_dir, "change directory on pushd (relative path)" );
 
 #--------------------------------------------------------------------------#
 # Test stringification
@@ -46,5 +60,41 @@ is( abs_path(), $original_dir,
     "revert directory when variable goes out of scope"
 );
 
-    
+#--------------------------------------------------------------------------#
+# Test changing to absolute path directory and reverting
+#--------------------------------------------------------------------------#
+
+$new_dir = pushd($expected_dir);
+is( abs_path(), $expected_dir, "change directory on pushd (absolute path)" );
+
+undef $new_dir;
+is( abs_path(), $original_dir,
+    "revert directory when variable goes out of scope"
+);
+
+#--------------------------------------------------------------------------#
+# Test changing upwards
+#--------------------------------------------------------------------------#
+
+$new_dir = pushd("..");
+$expected_dir = abscatdir($original_dir, "..");
+
+is( abs_path(), $expected_dir, "change directory on pushd (upwards)" );
+undef $new_dir;
+is( abs_path(), $original_dir,
+    "revert directory when variable goes out of scope"
+);
+
+#--------------------------------------------------------------------------#
+# Test changing to root 
+#--------------------------------------------------------------------------#
+
+$new_dir = pushd( File::Spec->rootdir() );
+
+is( abs_path(), File::Spec->rootdir() , 
+    "change directory on pushd (root)" );
+undef $new_dir;
+is( abs_path(), $original_dir,
+    "revert directory when variable goes out of scope"
+);
 

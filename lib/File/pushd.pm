@@ -73,7 +73,13 @@ sub pushd {
     my ($target_dir) = @_;
     
     my $orig = Cwd::abs_path();
-    chdir Cwd::abs_path( File::Spec->catdir( $orig, $target_dir ) );
+    my $dest 
+        = File::Spec->file_name_is_absolute( $target_dir )
+        ? $target_dir
+        : File::Spec->catdir( $orig, $target_dir );
+    
+    chdir $dest or croak "Couldn't chdir to nonexistant directory $dest";
+
     my $self = { 
         original => $orig,
         cwd => Cwd::abs_path(),
