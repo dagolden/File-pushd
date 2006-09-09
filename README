@@ -1,0 +1,13 @@
+If this is still here it means the programmer was too lazy to create the readme file.
+
+You can create it now by using the command shown below from this directory:
+
+pod2text File::pushd > README
+
+At the very least you should be able to use this set of instructions
+to install the module...
+perl Build.PL
+perl Build
+perl Build test
+perl Build install
+If you are on a windows box you should use 'nmake' rather than 'make'.
