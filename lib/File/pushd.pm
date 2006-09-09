@@ -101,7 +101,7 @@ sub pushd {
         my $tgt = dir($target_dir);
         $dest   = $tgt->is_absolute
                 ? $tgt 
-                : $orig->subdir( $tgt );
+                : $orig->subdir( $tgt )->absolute;
     }
     else {
         $dest = '';

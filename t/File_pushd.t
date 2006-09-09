@@ -90,7 +90,10 @@ is( dir()->absolute, $original_dir,
 
 $new_dir = pushd( dir('') );
 
-is( dir()->absolute, dir(''), 
+# roundtrip dir() to drop volume (File::Spec bug workaround)
+my $curdir = dir()->absolute->relative->absolute;
+
+is( $curdir, dir('')->absolute,
     "change directory on pushd (root)" );
 undef $new_dir;
 is( dir()->absolute(), $original_dir,
