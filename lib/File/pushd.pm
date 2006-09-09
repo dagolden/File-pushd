@@ -1,7 +1,7 @@
 package File::pushd;
 
-$VERSION     = "0.30";
-@EXPORT      = qw (pushd tempd);
+$VERSION = "0.30";
+@EXPORT  = qw (pushd tempd);
 
 use strict;
 use warnings;
