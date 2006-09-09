@@ -1,5 +1,9 @@
 Revision history for Perl module File::pushd
 
+0.30 in progress
+    - eliminated subclassing of Path::Class to eliminate this non-core
+      dependency and improve cross platform compatibility
+
 0.24 Tue Nov  8 09:40:02 EST 2005
     - added Exporter to @ISA for backwards compatibility [Anton Berezin]
     

@@ -8,8 +8,9 @@ Module::Build->new(
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires            => {
-        Test::More      => 0.48,
+        Test::More      => 0.47,
+        File::Path      => 0,
+        File::Spec      => 0,
         File::Temp      => 0,
-        Path::Class     => 0.13,
     },
 )->create_build_script;
