@@ -85,7 +85,7 @@ Caches the current working directory, calls C<chdir> to change to the target
 directory, and returns a File::pushd object.  When the object is
 destroyed, the working directory reverts to the original directory.
 
-The provided target directory can either be a relative or absolute path. If
+The provided target directory can be a relative or absolute path. If
 called with no arguments, it uses the current directory as its target and
 returns to the current directory when the object is destroyed.
 
@@ -174,7 +174,7 @@ sub DESTROY {
     chdir $orig if $orig; # should always be so, but just in case...
     if ( $self->{_tempd} && 
         !$self->{_preserve} ) {
-        eval { rmtree( $self->{_pushd}, 0, 1 ) };
+        eval { rmtree( $self->{_pushd} ) };
         carp $@ if $@;
     }
 }
