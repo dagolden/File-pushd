@@ -1,5 +1,9 @@
 Revision history for Perl module File::pushd
 
+0.23 Mon Nov  7 22:14:51 EST 2005
+    - derived directories revert to Path::Class::Dir instead of
+      File::pushd
+
 0.22 Mon Nov  7 18:26:50 EST 2005
     - fixed bug in Win32 tests for changing to root directory
       (work around a Path::Class/File::Spec bug)

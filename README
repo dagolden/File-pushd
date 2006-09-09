@@ -91,6 +91,12 @@ USAGE
     `pushd' are always preserved.) `preserve' returns true if the directory
     will be preserved, and false otherwise.
 
+  new
+
+    `new' should never be used directly. It is a passthrough function that
+    exists to ensure that directories derived from a `File::pushd' are just
+    regular `Path::Class::Dir' objects.
+
 SEE ALSO
     Path::Class, File::chdir
 
