@@ -1,6 +1,6 @@
 # File::pushd - check module loading and create testing directory
 
-use Test::More tests =>  13 ;
+use Test::More tests =>  16 ;
 use Cwd qw( abs_path );
 use File::Spec;
 
@@ -93,6 +93,24 @@ $new_dir = pushd( File::Spec->rootdir() );
 
 is( abs_path(), File::Spec->rootdir() , 
     "change directory on pushd (root)" );
+undef $new_dir;
+is( abs_path(), $original_dir,
+    "revert directory when variable goes out of scope"
+);
+
+#--------------------------------------------------------------------------#
+# Test changing in place
+#--------------------------------------------------------------------------#
+
+$new_dir = pushd( );
+
+is( abs_path(), $original_dir, 
+    "pushd with no argument doesn't change directory" 
+);
+chdir "t";
+is( abs_path(), abscatdir( $original_dir, "t" ),
+    "changing manually to another directory"
+);
 undef $new_dir;
 is( abs_path(), $original_dir,
     "revert directory when variable goes out of scope"
