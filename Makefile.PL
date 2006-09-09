@@ -8,9 +8,11 @@ WriteMakefile
           'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/File/pushd.pm',
           'PREREQ_PM' => {
-                           'Test::More' => '0.48',
+                           'Test::More' => '0.47',
                            'File::Temp' => 0,
-                           'Path::Class' => '0.13'
+                           'File::Spec' => 0,
+                           'File::Path' => 0,
+                           'Cwd' => 0
                          }
         )
 ;

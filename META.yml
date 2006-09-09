@@ -1,6 +1,6 @@
 ---
 name: File-pushd
-version: 0.24
+version: 0.30
 author:
   - David A Golden <dagolden@cpan.org>
 abstract: change directory temporarily for a limited scope
@@ -8,12 +8,13 @@ license: perl
 resources:
   license: http://dev.perl.org/licenses/
 requires:
+  Cwd: 0
+  File::Path: 0
+  File::Spec: 0
   File::Temp: 0
-  Path::Class: 0.13
-  Test::More: 0.48
-  perl: 5.005
+  Test::More: 0.47
 provides:
   File::pushd:
     file: lib/File/pushd.pm
-    version: 0.24
+    version: 0.30
 generated_by: Module::Build version 0.2703

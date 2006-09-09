@@ -5,10 +5,9 @@ use warnings;
 use Test::More tests =>  34 ;
 use Cwd 'abs_path';
 use File::Path 'rmtree';
-use File::Spec::Functions qw( catdir curdir updir rel2abs ); 
-sub absdir {
-    rel2abs( abs_path( shift || curdir() ) );
-}
+use File::Spec::Functions qw( catdir curdir updir canonpath ); 
+
+sub absdir { canonpath( abs_path( shift || curdir() ) ); }
 
 #--------------------------------------------------------------------------#
 # Test import

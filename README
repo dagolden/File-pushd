@@ -13,18 +13,18 @@ SYNOPSIS
      }
      # working directory has reverted to $ENV{HOME}
 
-     # equivalent to pushd( File::Temp::tempdir )
+     # tempd() is equivalent to pushd( File::Temp::tempdir )
      {
          my $dir = tempd();
      }
 
-     # $dir is a Path::Class::Dir object
+     # object stringifies naturally as an absolute path
      {
-         my $dir = pushd( '/tmp' );
-         print "Contents of $dir:\n";
-         print "  $_\n" for $dir->children();
+        my $dir = pushd( '/tmp' );
+        my $filename = File::Spec->catfile( $dir, "somefile.txt" );
+        # gives /tmp/somefile.txt
      }
-
+    
 DESCRIPTION
     File::pushd does a temporary `chdir' that is easily and automatically
     reverted, similar to `pushd' in some Unix command shells. It works by
@@ -38,8 +38,8 @@ DESCRIPTION
     like testing; a function is provided to streamline getting a temporary
     directory from File::Temp.
 
-    The directory objects created are subclassed from Path::Class::Dir, and
-    provide all the power and simplicity of Path::Class.
+    For convenience, the object stringifies as the absolute pathname of the
+    directory entered.
 
 USAGE
      use File::pushd;
@@ -54,12 +54,11 @@ USAGE
      }
 
     Caches the current working directory, calls `chdir' to change to the
-    target directory, and returns a File::pushd object (which is a subclass
-    of a Path::Class::Dir object with an absolute pathname). When the object
-    is destroyed, the working directory reverts to the original directory.
+    target directory, and returns a File::pushd object. When the object is
+    destroyed, the working directory reverts to the original directory.
 
-    The provided target directory can either be a relative or absolute path.
-    If called with no arguments, it uses the current directory as its target
+    The provided target directory can be a relative or absolute path. If
+    called with no arguments, it uses the current directory as its target
     and returns to the current directory when the object is destroyed.
 
   tempd
@@ -91,14 +90,8 @@ USAGE
     `pushd' are always preserved.) `preserve' returns true if the directory
     will be preserved, and false otherwise.
 
-  new
-
-    `new' should never be used directly. It is a passthrough function that
-    exists to ensure that directories derived from a `File::pushd' are just
-    regular `Path::Class::Dir' objects.
-
 SEE ALSO
-    Path::Class, File::chdir
+    File::chdir
 
 BUGS
     Please report bugs using the CPAN Request Tracker at
