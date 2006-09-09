@@ -21,32 +21,37 @@ BEGIN {
 # main pod documentation 
 #--------------------------------------------------------------------------#
 
-# Below is the stub of documentation for your module. You better edit it!
-
 =head1 NAME
 
-File::pushd - temporary chdir until the end of a scope 
+File::pushd - temporary chdir until File::pushd object goes out of scope
 
 =head1 SYNOPSIS
 
  use File::pushd;
 
  chdir $ENV{HOME};
-
  {
-     # changes to /tmp
      my $dir = pushd( '/tmp' );
+     # working directory changed to /tmp
  }
- 
  # working directory reverted to $ENV{HOME}
 
 =head1 DESCRIPTION
 
-Description...
+File::pushd does a temporary C<chdir> that is easily and automatically
+reverted.  It works by creating a simple object that caches the original
+working directory.  When the object is destroyed, the destructor calls C<chdir>
+to revert to the working directory at the time the object was created.
 
 =head1 USAGE
 
-Usage...
+ use File::pushd;
+
+Using File::pushd automatically imports the C<pushd> function.
+
+File::pushd also overloads stringification so that objects created with
+C<pushd> stringify as the absolute filepath that was set when the object was
+created.
 
 =cut
 
@@ -58,7 +63,9 @@ Usage...
 
  $dir = pushd( $target_directory);
 
-Description of pushd...
+Caches the current working directory, changes the working directory to the
+target directory, and returns a File::pushd object.  When the object is
+destroyed, the working directory is reverted to the original directory.
 
 =cut
 
@@ -77,21 +84,13 @@ sub pushd {
 
 #--------------------------------------------------------------------------#
 # DESTROY()
+# Revert to original directory as object is destroyed
 #--------------------------------------------------------------------------#
-
-=head2 DESTROY
-
- $rv = DESTROY();
-
-Description of DESTROY...
-
-=cut
 
 sub DESTROY {
 	my ($self) = @_;
     chdir $self->{original};
 }
-
 
 #--------------------------------------------------------------------------#
 # as_string()
@@ -99,9 +98,10 @@ sub DESTROY {
 
 =head2 as_string
 
- $rv = as_string();
+ print "$dir"; # calls $dir->as_string()
 
-Description of as_string...
+Returns the absolute path of the working directory set by the pushd object.
+Used automatically when the object is stringified.
 
 =cut
 
@@ -110,9 +110,12 @@ sub as_string {
     return $self->{cwd};
 }
 
-
 1; #this line is important and will help the module return a true value
 __END__
+
+=head1 SEE ALSO
+
+L<File::chdir>
 
 =head1 BUGS
 
@@ -136,7 +139,6 @@ it and/or modify it under the same terms as Perl itself.
 
 The full text of the license can be found in the
 LICENSE file included with this module.
-
 
 =head1 SEE ALSO
 

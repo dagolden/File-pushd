@@ -1,13 +1,62 @@
-If this is still here it means the programmer was too lazy to create the readme file.
+NAME
+    File::pushd - temporary chdir until pushd object goes out of scope
 
-You can create it now by using the command shown below from this directory:
+SYNOPSIS
+     use File::pushd;
 
-pod2text File::pushd > README
+     chdir $ENV{HOME};
 
-At the very least you should be able to use this set of instructions
-to install the module...
-perl Build.PL
-perl Build
-perl Build test
-perl Build install
-If you are on a windows box you should use 'nmake' rather than 'make'.
+     {
+         # changes to /tmp
+         my $dir = pushd( '/tmp' );
+     }
+ 
+     # working directory reverted to $ENV{HOME}
+
+DESCRIPTION
+    Description...
+
+USAGE
+    Usage...
+
+  pushd
+
+     $dir = pushd( $target_directory);
+
+    Description of pushd...
+
+  DESTROY
+
+     $rv = DESTROY();
+
+    Description of DESTROY...
+
+  as_string
+
+     $rv = as_string();
+
+    Description of as_string...
+
+BUGS
+    Please report bugs using the CPAN Request Tracker at
+    http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-pushd
+
+AUTHOR
+    David A Golden (DAGOLDEN)
+
+    dagolden@cpan.org
+
+    http://dagolden.com/
+
+COPYRIGHT
+    Copyright (c) 2005 by David A Golden
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
+    The full text of the license can be found in the LICENSE file included
+    with this module.
+
+SEE ALSO
+    perl(1).
+
