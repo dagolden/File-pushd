@@ -23,7 +23,7 @@ my ( $new_dir, $err );
 my $original_dir = abs_path();
 my $target_dir = 't';
 my $expected_dir = abscatdir( $original_dir, $target_dir );
-my $nonexistant = abscatdir( $original_dir, 'DFASDFASDFASDFAS' );
+my $nonexistant = 'DFASDFASDFASDFAS';
 
 #--------------------------------------------------------------------------#
 # Test error handling on bad target
@@ -31,7 +31,7 @@ my $nonexistant = abscatdir( $original_dir, 'DFASDFASDFASDFAS' );
 
 eval { $new_dir = pushd($nonexistant) };
 $err = $@;
-like( $@, qr/\ACouldn't chdir to nonexistant directory $nonexistant/,
+like( $@, qr/\ACouldn't chdir to nonexistant directory/,
     "pushd to nonexistant directory croaks" );
 
 #--------------------------------------------------------------------------#
@@ -91,7 +91,7 @@ is( abs_path(), $original_dir,
 
 $new_dir = pushd( File::Spec->rootdir() );
 
-is( abs_path(), File::Spec->rootdir() , 
+is( abs_path(), abs_path(File::Spec->rootdir()) , 
     "change directory on pushd (root)" );
 undef $new_dir;
 is( abs_path(), $original_dir,
