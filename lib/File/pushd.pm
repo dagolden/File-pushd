@@ -170,6 +170,24 @@ sub preserve {
 }
     
 #--------------------------------------------------------------------------#
+# new() -- make this give an actual Path::Class::Dir object
+# done this way to prevent Test::Pod::Coverage from complaining
+#--------------------------------------------------------------------------#
+
+=head2 new
+ 
+C<new> should never be used directly.  It is a passthrough function that exists
+to ensure that directories derived from a C<File::pushd> are just regular
+C<Path::Class::Dir> objects.
+
+=cut
+
+sub new { 
+    shift; 
+    return dir( @_ );
+}
+
+#--------------------------------------------------------------------------#
 # DESTROY()
 # Revert to original directory as object is destroyed and cleanup
 # if necessary
@@ -177,7 +195,8 @@ sub preserve {
 
 sub DESTROY {
     my ($self) = @_;
-    chdir $self->{__PACKAGE__ . "_original"};
+    my $orig = $self->{__PACKAGE__ . "_original"};
+    chdir $orig if $orig; # should always be so, but just in case...
     if ( $self->{__PACKAGE__ . "_tempd"} && 
         !$self->{__PACKAGE__ . "_preserve"} ) {
         eval { $self->rmtree };

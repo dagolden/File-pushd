@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests =>  35 ;
+use Test::More tests =>  36 ;
 use Path::Class;
 
 #--------------------------------------------------------------------------#
@@ -40,6 +40,11 @@ $new_dir = pushd($target_dir);
 
 isa_ok( $new_dir, 'File::pushd' );
 isa_ok( $new_dir, 'Path::Class::Dir' );
+
+my $derived = $new_dir->parent;
+is( ref $derived, 'Path::Class::Dir', 
+    "derived directories revert to Path::Class::Dir" 
+);
 
 is( dir()->absolute, $expected_dir, "change directory on pushd (relative path)" );
 
