@@ -7,7 +7,7 @@ use Cwd 'abs_path';
 use File::Path 'rmtree';
 use File::Spec::Functions qw( catdir curdir updir rel2abs ); 
 sub absdir {
-    abs_path( shift || curdir() );
+    rel2abs( abs_path( shift || curdir() ) );
 }
 
 #--------------------------------------------------------------------------#
