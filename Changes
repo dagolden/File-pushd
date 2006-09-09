@@ -1,9 +1,10 @@
 Revision history for Perl module File::pushd
 
-0.32 in progress
+0.32 Sat Feb  4 23:41:33 EST 2006
     - eliminated syntax that prevented backwards compatibility to 5.004
     - adjusted Build.PL to lesser dependencies
     - added optional pod/pod-coverage test (skipped by default)
+    - switching to development-odd/release-even version numbering
     
 0.30 Sat Dec  3 10:24:16 EST 2005
     - eliminated subclassing of Path::Class to eliminate this non-core
