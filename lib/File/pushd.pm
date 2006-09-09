@@ -105,7 +105,7 @@ sub pushd {
     croak "Can't locate directory $dest: $@" if $@;
     
     if ($dest ne $orig) { 
-        chdir $dest or croak "Couldn't chdir to $dest: $!";
+        chdir $dest or croak "Can't chdir to $dest: $!";
     }
 
     my $self = bless { 

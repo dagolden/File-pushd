@@ -34,7 +34,7 @@ my $nonexistant = 'DFASDFASDFASDFAS';
 
 eval { $new_dir = pushd($nonexistant) };
 $err = $@;
-like( $@, qr/\ACan't locate directory/,
+like( $@, qr/\ACan't/,
     "pushd to nonexistant directory croaks" );
 
 #--------------------------------------------------------------------------#
