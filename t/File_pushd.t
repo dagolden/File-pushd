@@ -3,10 +3,11 @@ use strict;
 use warnings;
 
 use Test::More tests =>  34 ;
-use Cwd 'abs_path';
 use File::Path 'rmtree';
-use File::Spec::Functions qw( catdir curdir updir canonpath ); 
+use Cwd 'abs_path';
+use File::Spec::Functions qw( catdir curdir updir canonpath rootdir ); 
 
+# abs_path necessary to pick up the volume on Win32, e.g. C:\
 sub absdir { canonpath( abs_path( shift || curdir() ) ); }
 
 #--------------------------------------------------------------------------#
@@ -24,7 +25,7 @@ can_ok( 'main', 'pushd', 'tempd' );
 my ( $new_dir, $temp_dir, $err );
 my $original_dir = absdir();
 my $target_dir = 't';
-my $expected_dir = catdir($original_dir,$target_dir);
+my $expected_dir = absdir( catdir($original_dir,$target_dir) );
 my $nonexistant = 'DFASDFASDFASDFAS';
 
 #--------------------------------------------------------------------------#
@@ -33,7 +34,7 @@ my $nonexistant = 'DFASDFASDFASDFAS';
 
 eval { $new_dir = pushd($nonexistant) };
 $err = $@;
-like( $@, qr/\ACouldn't chdir to nonexistant directory/,
+like( $@, qr/\ACan't locate directory/,
     "pushd to nonexistant directory croaks" );
 
 #--------------------------------------------------------------------------#
@@ -79,7 +80,7 @@ is( absdir(), $original_dir,
 #--------------------------------------------------------------------------#
 
 $expected_dir = absdir(updir());
-$new_dir = pushd("..");
+$new_dir = pushd(updir());
 
 is( absdir(), $expected_dir, "change directory on pushd (upwards)" );
 undef $new_dir;
@@ -91,12 +92,11 @@ is( absdir(), $original_dir,
 # Test changing to root 
 #--------------------------------------------------------------------------#
 
-$new_dir = pushd( absdir('') );
 
-my $curdir = absdir();
+$new_dir = pushd( rootdir() );
 
-is( $curdir, absdir(''),
-    "change directory on pushd (root)" );
+is( absdir(), absdir( rootdir() ),
+    "change directory on pushd (rootdir)" );
 undef $new_dir;
 is( absdir(), $original_dir,
     "revert directory when variable goes out of scope"
@@ -112,7 +112,7 @@ is( absdir(), $original_dir,
     "pushd with no argument doesn't change directory" 
 );
 chdir "t";
-is( absdir(), catdir( $original_dir, "t" ) ,
+is( absdir(), absdir( catdir( $original_dir, "t" ) ) ,
     "changing manually to another directory"
 );
 undef $new_dir;
@@ -183,7 +183,7 @@ ok( ! -e $temp_dir, "temporary directory removed" );
 
 $new_dir = pushd( catdir( $original_dir, $target_dir ) );
 
-is( absdir(), catdir( $original_dir, $target_dir ), 
+is( absdir(), absdir( catdir( $original_dir, $target_dir ) ), 
     "change directory on pushd" );
 $temp_dir = "$new_dir";
 

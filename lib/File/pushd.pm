@@ -6,12 +6,15 @@ $VERSION = "0.30";
 use strict;
 use warnings;
 use Carp;
-use File::Temp qw();
-use File::Spec::Functions qw( rel2abs catdir curdir );
-use File::Path 'rmtree';
-use base qw( Exporter );
+
+use base        qw( Exporter );
+use Cwd         qw( cwd abs_path );
+use File::Path  qw( rmtree );
+use File::Temp  qw();
+use File::Spec;
+
 use overload 
-    q{""} => sub { $_[0]->{_pushd} },
+    q{""} => sub { File::Spec->canonpath( $_[0]->{_pushd} ) },
     fallback => 1;
 
 #--------------------------------------------------------------------------#
@@ -60,8 +63,8 @@ This is very handy when working with temporary directories for tasks like
 testing; a function is provided to streamline getting a temporary
 directory from L<File::Temp>.
 
-For convenience, the object stringifies as the absolute pathname of the 
-directory entered.
+For convenience, the object stringifies as the canonical form of the absolute
+pathname of the directory entered.
 
 =head1 USAGE
 
@@ -94,11 +97,15 @@ returns to the current directory when the object is destroyed.
 sub pushd {
     my ($target_dir) = @_;
     
-    my $orig = rel2abs( curdir() );
-    my $dest   = $target_dir ? rel2abs( $target_dir ) : $orig;
+    my $orig = cwd;
     
-    if ( $dest ne $orig ) {
-        chdir $dest or croak "Couldn't chdir to nonexistant directory $dest";
+    my $dest;
+    eval { $dest   = $target_dir ? abs_path( $target_dir ) : $orig };
+    
+    croak "Can't locate directory $dest: $@" if $@;
+    
+    if ($dest ne $orig) { 
+        chdir $dest or croak "Couldn't chdir to $dest: $!";
     }
 
     my $self = bless { 
