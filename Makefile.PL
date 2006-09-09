@@ -8,7 +8,7 @@ WriteMakefile
           'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/File/pushd.pm',
           'PREREQ_PM' => {
-                           'Test::More' => '0.47',
+                           'Test::More' => '0.45',
                            'File::Temp' => 0,
                            'File::Spec' => 0,
                            'File::Path' => 0,

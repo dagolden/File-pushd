@@ -1,13 +1,14 @@
 package File::pushd;
 
-$VERSION = "0.30";
-@EXPORT  = qw (pushd tempd);
+$VERSION = "0.32";
+@EXPORT  = qw( pushd tempd );
+@ISA     = qw( Exporter );
 
+use 5.004;
 use strict;
-use warnings;
+#use warnings;
+use Exporter;
 use Carp;
-
-use base        qw( Exporter );
 use Cwd         qw( cwd abs_path );
 use File::Path  qw( rmtree );
 use File::Temp  qw();

@@ -5,8 +5,8 @@ SYNOPSIS
      use File::pushd;
 
      chdir $ENV{HOME};
- 
-     # change directory again for a limited scope
+     
+ # change directory again for a limited scope
      {
          my $dir = pushd( '/tmp' );
          # working directory changed to /tmp
@@ -24,12 +24,12 @@ SYNOPSIS
         my $filename = File::Spec->catfile( $dir, "somefile.txt" );
         # gives /tmp/somefile.txt
      }
-    
+
 DESCRIPTION
-    File::pushd does a temporary `chdir' that is easily and automatically
-    reverted, similar to `pushd' in some Unix command shells. It works by
+    File::pushd does a temporary "chdir" that is easily and automatically
+    reverted, similar to "pushd" in some Unix command shells. It works by
     creating an object that caches the original working directory. When the
-    object is destroyed, the destructor calls `chdir' to revert to the
+    object is destroyed, the destructor calls "chdir" to revert to the
     original working directory. By storing the object in a lexical variable
     with a limited scope, this happens automatically at the end of the
     scope.
@@ -38,22 +38,21 @@ DESCRIPTION
     like testing; a function is provided to streamline getting a temporary
     directory from File::Temp.
 
-    For convenience, the object stringifies as the absolute pathname of the
-    directory entered.
+    For convenience, the object stringifies as the canonical form of the
+    absolute pathname of the directory entered.
 
 USAGE
      use File::pushd;
 
-    Using File::pushd automatically imports the `pushd' and `tempd'
+    Using File::pushd automatically imports the "pushd" and "tempd"
     functions.
 
   pushd
-
      {
          my $dir = pushd( $target_directory );
      }
 
-    Caches the current working directory, calls `chdir' to change to the
+    Caches the current working directory, calls "chdir" to change to the
     target directory, and returns a File::pushd object. When the object is
     destroyed, the working directory reverts to the original directory.
 
@@ -62,20 +61,18 @@ USAGE
     and returns to the current directory when the object is destroyed.
 
   tempd
-
      {
          my $dir = tempd();
      }
 
-    This function is like `pushd' but automatically creates and calls
-    `chdir' to a temporary directory as created by File::Temp. Unlike normal
+    This function is like "pushd" but automatically creates and calls
+    "chdir" to a temporary directory as created by File::Temp. Unlike normal
     File::Temp cleanup which happens at the end of the program, this
     temporary directory is removed when the object is destroyed. (But also
-    see `preserve'.) A warning will be issued if the directory cannot be
+    see "preserve".) A warning will be issued if the directory cannot be
     removed.
 
   preserve
-
      {
          my $dir = tempd();
          $dir->preserve;      # mark to preserve at end of scope
@@ -83,11 +80,11 @@ USAGE
      }
 
     Controls whether a temporary directory will be cleaned up when the
-    object is destroyed. With no arguments, `preserve' sets the directory to
+    object is destroyed. With no arguments, "preserve" sets the directory to
     be preserved. With an argument, the directory will be preserved if the
     argument is true, or marked for cleanup if the argument is false. Only
-    `tempd' objects may be marked for cleanup. (Target directories to
-    `pushd' are always preserved.) `preserve' returns true if the directory
+    "tempd" objects may be marked for cleanup. (Target directories to
+    "pushd" are always preserved.) "preserve" returns true if the directory
     will be preserved, and false otherwise.
 
 SEE ALSO
@@ -95,7 +92,7 @@ SEE ALSO
 
 BUGS
     Please report bugs using the CPAN Request Tracker at
-    http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-pushd
+    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-pushd>
 
     When submitting a bug or request, please include a test-file or a patch
     to an existing test-file that illustrates the bug or desired feature.
@@ -105,7 +102,7 @@ AUTHOR
 
     dagolden@cpan.org
 
-    http://dagolden.com/
+    <http://dagolden.com/>
 
 COPYRIGHT
     Copyright (c) 2005 by David A Golden

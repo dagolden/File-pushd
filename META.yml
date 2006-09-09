@@ -1,6 +1,6 @@
 ---
 name: File-pushd
-version: 0.30
+version: 0.32
 author:
   - David A Golden <dagolden@cpan.org>
 abstract: change directory temporarily for a limited scope
@@ -12,9 +12,10 @@ requires:
   File::Path: 0
   File::Spec: 0
   File::Temp: 0
-  Test::More: 0.47
+  Test::More: 0.45
+  perl: 5.004
 provides:
   File::pushd:
     file: lib/File/pushd.pm
-    version: 0.30
+    version: 0.32
 generated_by: Module::Build version 0.2703

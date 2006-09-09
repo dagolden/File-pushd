@@ -1,6 +1,6 @@
 # File::pushd - check module loading and create testing directory
 use strict;
-use warnings;
+#use warnings;
 
 use Test::More tests =>  34 ;
 use File::Path 'rmtree';
@@ -34,7 +34,7 @@ my $nonexistant = 'DFASDFASDFASDFAS';
 
 eval { $new_dir = pushd($nonexistant) };
 $err = $@;
-like( $@, qr/\ACan't/,
+like( $@, '/\\ACan\'t/',
     "pushd to nonexistant directory croaks" );
 
 #--------------------------------------------------------------------------#

@@ -8,10 +8,11 @@ Module::Build->new(
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires            => {
-        Cwd             => 0,
-        File::Path      => 0,
-        File::Spec      => 0,
-        File::Temp      => 0,
-        Test::More      => 0.47,
+        'perl'          => 5.004,
+        'Cwd'           => 0,
+        'File::Path'    => 0,
+        'File::Spec'    => 0,
+        'File::Temp'    => 0,
+        'Test::More'    => 0.45, # thread safe
     },
 )->create_build_script;
