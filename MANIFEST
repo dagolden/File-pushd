@@ -8,3 +8,4 @@ lib/File/pushd.pm
 t/File_pushd.t
 Build.PL
 META.yml
+Makefile.PL

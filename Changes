@@ -1,4 +1,7 @@
 Revision history for Perl module File::pushd
 
+0.20 Fri Sep  2 06:47:07 EDT 2005
+    - added tempd function
+
 0.10 Thu Sep  1 23:53:46 EDT 2005
 	- Initial release

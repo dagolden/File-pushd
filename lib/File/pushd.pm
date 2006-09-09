@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Carp;
 use File::Spec;
+use File::Temp qw();
+use File::Path qw();
 use Cwd;
 
 use overload 
@@ -10,11 +12,11 @@ use overload
 ;
 
 BEGIN {
-	use Exporter ();
-	use vars qw ($VERSION @ISA @EXPORT);
-	$VERSION     = '0.10';
-	@ISA         = qw (Exporter);
-	@EXPORT      = qw (pushd);
+    use Exporter qw();
+    use vars qw ($VERSION @ISA @EXPORT);
+    $VERSION     = '0.20';
+    @ISA         = qw (Exporter);
+    @EXPORT      = qw (pushd tempd);
 }
 
 #--------------------------------------------------------------------------#
@@ -23,35 +25,48 @@ BEGIN {
 
 =head1 NAME
 
-File::pushd - temporary chdir until File::pushd object goes out of scope
+File::pushd - temporary chdir for a limited scope
 
 =head1 SYNOPSIS
 
  use File::pushd;
 
  chdir $ENV{HOME};
+ 
+ # change directory again for a limited scope
  {
      my $dir = pushd( '/tmp' );
      # working directory changed to /tmp
  }
- # working directory reverted to $ENV{HOME}
+ # working directory has reverted to $ENV{HOME}
+
+ # equivalent to pushd( File::Temp::tempdir )
+ {
+     my $dir = tempd();
+ }
 
 =head1 DESCRIPTION
 
 File::pushd does a temporary C<chdir> that is easily and automatically
 reverted.  It works by creating a simple object that caches the original
 working directory.  When the object is destroyed, the destructor calls C<chdir>
-to revert to the working directory at the time the object was created.
+to revert to the original working directory.  By storing the object in a
+lexical variable with a limited scope, this happens automatically at the end of
+the scope.
+
+As this is very handy when working with temporary directories for tasks like
+testing, a function is provided to streamline getting a temporary
+directory from L<File::Temp>.  
 
 =head1 USAGE
 
  use File::pushd;
 
-Using File::pushd automatically imports the C<pushd> function.
+Using File::pushd automatically imports the C<pushd> and C<tempd> functions.
 
 File::pushd also overloads stringification so that objects created with
-C<pushd> stringify as the absolute filepath that was set when the object was
-created.
+C<pushd> or C<tempd> stringify as the absolute filepath that was set when the
+object was created.
 
 =cut
 
@@ -61,11 +76,17 @@ created.
 
 =head2 pushd
 
- $dir = pushd( $target_directory);
+ {
+     my $dir = pushd( $target_directory );
+ }
 
-Caches the current working directory, changes the working directory to the
-target directory, and returns a File::pushd object.  When the object is
-destroyed, the working directory is reverted to the original directory.
+Caches the current working directory, calls C<chdir> to change to the target
+directory, and returns a File::pushd object.  When the object is destroyed, the
+working directory reverts to the original directory.
+
+The target directory can either be a relative or absolute path. If called with
+no arguments, it uses the current directory as its target and returns to the
+current directory when the object is destroyed.
 
 =cut
 
@@ -97,13 +118,42 @@ sub pushd {
 }
 
 #--------------------------------------------------------------------------#
+# tempd()
+#--------------------------------------------------------------------------#
+
+=head2 tempd
+
+ {
+     my $dir = tempd();
+ }
+
+Like C<pushd> but automatically create and C<chdir> to a temporary directory
+from L<File::Temp>. Unlike normal L<File::Temp> cleanup which happens at the
+end of the program, this temporary directory is removed when the object is
+destroyed.  A warning will be issued if the directory cannot be removed.
+
+=cut
+
+sub tempd {
+    my $dir = pushd( File::Temp::tempdir() );
+    $dir->{cleanup} = 1;
+    return $dir;
+}
+
+
+#--------------------------------------------------------------------------#
 # DESTROY()
-# Revert to original directory as object is destroyed
+# Revert to original directory as object is destroyed and cleanup
+# if necessary
 #--------------------------------------------------------------------------#
 
 sub DESTROY {
-	my ($self) = @_;
+    my ($self) = @_;
     chdir $self->{original};
+    if ( $self->{cleanup} ) {
+        eval { File::Path::rmtree( $self->{cwd} ) };
+        carp $@ if $@;
+    }
 }
 
 #--------------------------------------------------------------------------#
@@ -120,7 +170,7 @@ Used automatically when the object is stringified.
 =cut
 
 sub as_string {
-	my ($self) = @_;
+    my ($self) = @_;
     return $self->{cwd};
 }
 

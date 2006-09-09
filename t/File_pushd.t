@@ -1,15 +1,18 @@
 # File::pushd - check module loading and create testing directory
+use strict;
+use warnings;
 
-use Test::More tests =>  16 ;
+use Test::More tests =>  19 ;
 use Cwd qw( abs_path );
 use File::Spec;
+use File::Path;
 
 #--------------------------------------------------------------------------#
 # Test import
 #--------------------------------------------------------------------------#
 
 BEGIN { use_ok( 'File::pushd' ); }
-can_ok( 'main', 'pushd' );
+can_ok( 'main', 'pushd', 'tempd' );
 
 #--------------------------------------------------------------------------#
 # Setup
@@ -19,7 +22,7 @@ sub abscatdir {
     return abs_path( File::Spec->catdir( @_ ) );
 }
 
-my ( $new_dir, $err );
+my ( $new_dir, $temp_dir, $err );
 my $original_dir = abs_path();
 my $target_dir = 't';
 my $expected_dir = abscatdir( $original_dir, $target_dir );
@@ -115,4 +118,20 @@ undef $new_dir;
 is( abs_path(), $original_dir,
     "revert directory when variable goes out of scope"
 );
+
+#--------------------------------------------------------------------------#
+# Test changing to temporary dir
+#--------------------------------------------------------------------------#
+
+$new_dir = tempd();
+$temp_dir = "$new_dir";
+
+ok( abs_path() ne $original_dir, "tempd changes to new temporary directory" );
+
+undef $new_dir;
+is( abs_path(), $original_dir,
+    "revert directory when variable goes out of scope"
+);
+
+ok( ! -e $temp_dir, "temporary directory cleaned up" );
 

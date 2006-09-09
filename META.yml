@@ -1,15 +1,18 @@
 ---
 name: File-pushd
-version: 0.10
+version: 0.20
 author:
   - David A Golden <dagolden@cpan.org>
-abstract: temporary chdir until File::pushd object goes out of scope
+abstract: temporary chdir for a limited scope
 license: perl
 requires:
+  File::Path: 0
+  File::Spec: 0
+  File::Temp: 0
   Test::More: 0.48
   perl: 5.005
 provides:
   File::pushd:
     file: lib/File/pushd.pm
-    version: 0.10
+    version: 0.20
 generated_by: Module::Build version 0.2702
