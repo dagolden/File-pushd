@@ -8,7 +8,6 @@ Module::Build->new(
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires            => {
-        perl            => 5.005,
         Test::More      => 0.48,
         File::Temp      => 0,
         Path::Class     => 0.13,
