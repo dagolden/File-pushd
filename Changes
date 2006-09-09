@@ -1,5 +1,9 @@
 Revision history for Perl module File::pushd
 
+0.21 in progress
+    - added ability to preserve temporary directories after creation
+    - fixed overloading bug (added fallback)
+
 0.20 Fri Sep  2 06:47:07 EDT 2005
     - added tempd function
 

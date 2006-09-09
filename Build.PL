@@ -13,5 +13,6 @@ Module::Build->new(
         File::Path      => 0,
         File::Spec      => 0,
         File::Temp      => 0,
+        Path::Class     => 0.13,
     },
 )->create_build_script;

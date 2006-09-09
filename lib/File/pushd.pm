@@ -8,13 +8,14 @@ use File::Path qw();
 use Cwd;
 
 use overload 
-    q{""} => \&as_string
+    q{""} => \&as_string,
+    fallback => 1,
 ;
 
 BEGIN {
     use Exporter qw();
     use vars qw ($VERSION @ISA @EXPORT);
-    $VERSION     = '0.20';
+    $VERSION     = "0.21";
     @ISA         = qw (Exporter);
     @EXPORT      = qw (pushd tempd);
 }
@@ -140,7 +141,32 @@ sub tempd {
     return $dir;
 }
 
+=head2 preserve 
 
+ my $will_preserve = $dir->preserve;
+ $dir->preserve( $new_value );
+
+Prevents a temporary directory from being cleaned up when the object goes
+out of scope.  With no arguments, sets the directory to be preserved. 
+With an argument, preserves if the argument is true, or marks for cleanup
+if the argument is false.  This function only works with C<tempd>, 
+directory changes with C<pushd> are always preserved.  Returns
+the value of preserve.
+
+=cut
+
+sub preserve {
+    my $self = shift;
+    return 1 if ! $self->{cleanup};
+    if ( @_ == 0 ) {
+        $self->{preserve} = 1;
+    }
+    else {
+        $self->{preserve} = $_[0] ? 1 : 0;
+    }
+    return $self->{preserve};
+}
+    
 #--------------------------------------------------------------------------#
 # DESTROY()
 # Revert to original directory as object is destroyed and cleanup
@@ -150,7 +176,7 @@ sub tempd {
 sub DESTROY {
     my ($self) = @_;
     chdir $self->{original};
-    if ( $self->{cleanup} ) {
+    if ( $self->{cleanup} && ! $self->{preserve} ) {
         eval { File::Path::rmtree( $self->{cwd} ) };
         carp $@ if $@;
     }
