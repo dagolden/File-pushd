@@ -1,41 +1,50 @@
 NAME
-    File::pushd - temporary chdir until pushd object goes out of scope
+    File::pushd - temporary chdir until File::pushd object goes out of scope
 
 SYNOPSIS
      use File::pushd;
 
      chdir $ENV{HOME};
-
      {
-         # changes to /tmp
          my $dir = pushd( '/tmp' );
+         # working directory changed to /tmp
      }
- 
      # working directory reverted to $ENV{HOME}
 
 DESCRIPTION
-    Description...
+    File::pushd does a temporary `chdir' that is easily and automatically
+    reverted. It works by creating a simple object that caches the original
+    working directory. When the object is destroyed, the destructor calls
+    `chdir' to revert to the working directory at the time the object was
+    created.
 
 USAGE
-    Usage...
+     use File::pushd;
+
+    Using File::pushd automatically imports the `pushd' function.
+
+    File::pushd also overloads stringification so that objects created with
+    `pushd' stringify as the absolute filepath that was set when the object
+    was created.
 
   pushd
 
      $dir = pushd( $target_directory);
 
-    Description of pushd...
-
-  DESTROY
-
-     $rv = DESTROY();
-
-    Description of DESTROY...
+    Caches the current working directory, changes the working directory to
+    the target directory, and returns a File::pushd object. When the object
+    is destroyed, the working directory is reverted to the original
+    directory.
 
   as_string
 
-     $rv = as_string();
+     print "$dir"; # calls $dir->as_string()
 
-    Description of as_string...
+    Returns the absolute path of the working directory set by the pushd
+    object. Used automatically when the object is stringified.
+
+SEE ALSO
+    File::chdir
 
 BUGS
     Please report bugs using the CPAN Request Tracker at
