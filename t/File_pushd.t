@@ -3,11 +3,11 @@ use strict;
 use warnings;
 
 use Test::More tests =>  34 ;
-use Cwd;
+use Cwd 'abs_path';
 use File::Path 'rmtree';
 use File::Spec::Functions qw( catdir curdir updir rel2abs ); 
 sub absdir {
-    rel2abs( shift || curdir() );
+    abs_path( shift || curdir() );
 }
 
 #--------------------------------------------------------------------------#
@@ -79,7 +79,7 @@ is( absdir(), $original_dir,
 # Test changing upwards
 #--------------------------------------------------------------------------#
 
-$expected_dir = rel2abs(updir());
+$expected_dir = absdir(updir());
 $new_dir = pushd("..");
 
 is( absdir(), $expected_dir, "change directory on pushd (upwards)" );
