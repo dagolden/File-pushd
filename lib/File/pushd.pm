@@ -2,21 +2,14 @@ package File::pushd;
 use strict;
 use warnings;
 use Carp;
-use File::Spec;
+use Exporter 'import';
 use File::Temp qw();
-use File::Path qw();
-use Cwd;
-
-use overload 
-    q{""} => \&as_string,
-    fallback => 1,
-;
+use Path::Class;
+use base 'Path::Class::Dir';
 
 BEGIN {
-    use Exporter qw();
-    use vars qw ($VERSION @ISA @EXPORT);
+    use vars qw ($VERSION @EXPORT);
     $VERSION     = "0.21";
-    @ISA         = qw (Exporter);
     @EXPORT      = qw (pushd tempd);
 }
 
@@ -26,7 +19,7 @@ BEGIN {
 
 =head1 NAME
 
-File::pushd - temporary chdir for a limited scope
+File::pushd - change directory temporarily for a limited scope
 
 =head1 SYNOPSIS
 
@@ -46,28 +39,34 @@ File::pushd - temporary chdir for a limited scope
      my $dir = tempd();
  }
 
+ # $dir is a Path::Class::Dir object
+ {
+     my $dir = pushd( '/tmp' );
+     print "Contents of $dir:\n";
+     print "  $_\n" for $dir->children();
+ }
+
 =head1 DESCRIPTION
 
 File::pushd does a temporary C<chdir> that is easily and automatically
-reverted.  It works by creating a simple object that caches the original
-working directory.  When the object is destroyed, the destructor calls C<chdir>
-to revert to the original working directory.  By storing the object in a
-lexical variable with a limited scope, this happens automatically at the end of
-the scope.
+reverted, similar to C<pushd> in some Unix command shells.  It works by
+creating an object that caches the original working directory.  When the object
+is destroyed, the destructor calls C<chdir> to revert to the original working
+directory.  By storing the object in a lexical variable with a limited scope,
+this happens automatically at the end of the scope.
 
-As this is very handy when working with temporary directories for tasks like
-testing, a function is provided to streamline getting a temporary
+This is very handy when working with temporary directories for tasks like
+testing; a function is provided to streamline getting a temporary
 directory from L<File::Temp>.  
+
+The directory objects created are subclassed from L<Path::Class::Dir>, and 
+provide all the power and simplicity of L<Path::Class>.
 
 =head1 USAGE
 
  use File::pushd;
 
 Using File::pushd automatically imports the C<pushd> and C<tempd> functions.
-
-File::pushd also overloads stringification so that objects created with
-C<pushd> or C<tempd> stringify as the absolute filepath that was set when the
-object was created.
 
 =cut
 
@@ -82,25 +81,27 @@ object was created.
  }
 
 Caches the current working directory, calls C<chdir> to change to the target
-directory, and returns a File::pushd object.  When the object is destroyed, the
-working directory reverts to the original directory.
+directory, and returns a File::pushd object (which is a subclass of a
+L<Path::Class::Dir> object with an absolute pathname).  When the object is
+destroyed, the working directory reverts to the original directory.
 
-The target directory can either be a relative or absolute path. If called with
-no arguments, it uses the current directory as its target and returns to the
-current directory when the object is destroyed.
+The provided target directory can either be a relative or absolute path. If
+called with no arguments, it uses the current directory as its target and
+returns to the current directory when the object is destroyed.
 
 =cut
 
 sub pushd {
     my ($target_dir) = @_;
     
-    my $orig = Cwd::abs_path();
+    my $orig = dir()->absolute;
     my $dest;
 
     if ( $target_dir ) {
-        $dest   = File::Spec->file_name_is_absolute( $target_dir )
-                ? $target_dir 
-                : File::Spec->catdir( $orig, $target_dir );
+        my $tgt = dir($target_dir);
+        $dest   = $tgt->is_absolute
+                ? $tgt 
+                : $orig->subdir( $tgt );
     }
     else {
         $dest = '';
@@ -110,11 +111,8 @@ sub pushd {
         chdir $dest or croak "Couldn't chdir to nonexistant directory $dest";
     }
 
-    my $self = { 
-        original => $orig,
-        cwd => Cwd::abs_path(),
-    };
-    bless $self, __PACKAGE__;
+    my $self = bless dir()->absolute, __PACKAGE__;
+    $self->{__PACKAGE__ . "_original"} = $orig;
     return $self;
 }
 
@@ -128,43 +126,47 @@ sub pushd {
      my $dir = tempd();
  }
 
-Like C<pushd> but automatically create and C<chdir> to a temporary directory
-from L<File::Temp>. Unlike normal L<File::Temp> cleanup which happens at the
-end of the program, this temporary directory is removed when the object is
-destroyed.  A warning will be issued if the directory cannot be removed.
+This function is like C<pushd> but automatically creates and calls C<chdir> to
+a temporary directory as created by L<File::Temp>. Unlike normal L<File::Temp>
+cleanup which happens at the end of the program, this temporary directory is
+removed when the object is destroyed. (But also see C<preserve>.)  A warning
+will be issued if the directory cannot be removed.
 
 =cut
 
 sub tempd {
     my $dir = pushd( File::Temp::tempdir() );
-    $dir->{cleanup} = 1;
+    $dir->{__PACKAGE__ . "_tempd"} = 1;
     return $dir;
 }
 
 =head2 preserve 
 
- my $will_preserve = $dir->preserve;
- $dir->preserve( $new_value );
+ {
+     my $dir = tempd();
+     $dir->preserve;      # mark to preserve at end of scope
+     $dir->preserve(0);   # mark to delete at end of scope
+ }
 
-Prevents a temporary directory from being cleaned up when the object goes
-out of scope.  With no arguments, sets the directory to be preserved. 
-With an argument, preserves if the argument is true, or marks for cleanup
-if the argument is false.  This function only works with C<tempd>, 
-directory changes with C<pushd> are always preserved.  Returns
-the value of preserve.
+Controls whether a temporary directory will be cleaned up when the object is
+destroyed.  With no arguments, C<preserve> sets the directory to be preserved.
+With an argument, the directory will be preserved if the argument is true, or
+marked for cleanup if the argument is false.  Only C<tempd> objects may be
+marked for cleanup.  (Target directories to C<pushd> are always preserved.)
+C<preserve> returns true if the directory will be preserved, and false
+otherwise.
 
 =cut
 
 sub preserve {
     my $self = shift;
-    return 1 if ! $self->{cleanup};
+    return 1 if ! $self->{__PACKAGE__. "_tempd"};
     if ( @_ == 0 ) {
-        $self->{preserve} = 1;
+        return $self->{__PACKAGE__ . "_preserve"} = 1;
     }
     else {
-        $self->{preserve} = $_[0] ? 1 : 0;
+        return $self->{__PACKAGE__ . "_preserve"} = $_[0] ? 1 : 0;
     }
-    return $self->{preserve};
 }
     
 #--------------------------------------------------------------------------#
@@ -175,29 +177,12 @@ sub preserve {
 
 sub DESTROY {
     my ($self) = @_;
-    chdir $self->{original};
-    if ( $self->{cleanup} && ! $self->{preserve} ) {
-        eval { File::Path::rmtree( $self->{cwd} ) };
+    chdir $self->{__PACKAGE__ . "_original"};
+    if ( $self->{__PACKAGE__ . "_tempd"} && 
+        !$self->{__PACKAGE__ . "_preserve"} ) {
+        eval { $self->rmtree };
         carp $@ if $@;
     }
-}
-
-#--------------------------------------------------------------------------#
-# as_string()
-#--------------------------------------------------------------------------#
-
-=head2 as_string
-
- print "$dir"; # calls $dir->as_string()
-
-Returns the absolute path of the working directory set by the pushd object.
-Used automatically when the object is stringified.
-
-=cut
-
-sub as_string {
-    my ($self) = @_;
-    return $self->{cwd};
 }
 
 1; #this line is important and will help the module return a true value
@@ -205,12 +190,15 @@ __END__
 
 =head1 SEE ALSO
 
-L<File::chdir>
+L<Path::Class>, L<File::chdir>
 
 =head1 BUGS
 
 Please report bugs using the CPAN Request Tracker at 
-http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-pushd
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-pushd>
+
+When submitting a bug or request, please include a test-file or a patch to an
+existing test-file that illustrates the bug or desired feature.
 
 =head1 AUTHOR
 
@@ -218,7 +206,7 @@ David A Golden (DAGOLDEN)
 
 dagolden@cpan.org
 
-http://dagolden.com/
+L<http://dagolden.com/>
 
 =head1 COPYRIGHT
 
@@ -229,9 +217,5 @@ it and/or modify it under the same terms as Perl itself.
 
 The full text of the license can be found in the
 LICENSE file included with this module.
-
-=head1 SEE ALSO
-
-perl(1).
 
 =cut

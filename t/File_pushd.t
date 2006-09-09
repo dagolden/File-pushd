@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests =>  34 ;
+use Test::More tests =>  35 ;
 use Path::Class;
 
 #--------------------------------------------------------------------------#
@@ -39,6 +39,7 @@ like( $@, qr/\ACouldn't chdir to nonexistant directory/,
 $new_dir = pushd($target_dir);
 
 isa_ok( $new_dir, 'File::pushd' );
+isa_ok( $new_dir, 'Path::Class::Dir' );
 
 is( dir()->absolute, $expected_dir, "change directory on pushd (relative path)" );
 

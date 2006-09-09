@@ -1,6 +1,7 @@
 Revision history for Perl module File::pushd
 
-0.21 in progress
+0.21 Mon Nov  7 15:08:17 EST 2005
+    - objects created are now subclasses of Path::Class::Dir
     - added ability to preserve temporary directories after creation
     - fixed overloading bug (added fallback)
 

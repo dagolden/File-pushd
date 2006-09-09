@@ -10,8 +10,7 @@ WriteMakefile
           'PREREQ_PM' => {
                            'Test::More' => '0.48',
                            'File::Temp' => 0,
-                           'File::Spec' => 0,
-                           'File::Path' => 0
+                           'Path::Class' => '0.13'
                          }
         )
 ;
