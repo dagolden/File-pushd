@@ -9,7 +9,7 @@ use base 'Path::Class::Dir';
 
 BEGIN {
     use vars qw ($VERSION @EXPORT);
-    $VERSION     = "0.21";
+    $VERSION     = "0.22";
     @EXPORT      = qw (pushd tempd);
 }
 

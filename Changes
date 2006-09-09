@@ -1,5 +1,9 @@
 Revision history for Perl module File::pushd
 
+0.22 Mon Nov  7 18:26:50 EST 2005
+    - fixed bug in Win32 tests for changing to root directory
+      (work around a Path::Class/File::Spec bug)
+      
 0.21 Mon Nov  7 15:08:17 EST 2005
     - objects created are now subclasses of Path::Class::Dir
     - added ability to preserve temporary directories after creation
