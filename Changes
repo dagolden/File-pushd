@@ -2,6 +2,7 @@ Revision history for Perl module File::pushd
 
 0.34 in progress
     - updated Pod
+    - added example directory
 
 0.32 Sat Feb  4 23:41:33 EST 2006
     - eliminated syntax that prevented backwards compatibility to 5.004

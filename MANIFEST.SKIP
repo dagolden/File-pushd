@@ -15,6 +15,10 @@
 # Module::Build
 ^Build$
 ^_build
+.bat$
+
+# Coverage
+^cover_db
 
 # Temp, old, vi and emacs files.
 ~$
@@ -23,3 +27,4 @@
 ^\.#
 \.swp$
 \.bak$
+\.tmp$
