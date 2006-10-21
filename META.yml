@@ -1,8 +1,8 @@
 ---
 name: File-pushd
-version: 0.32
+version: 0.99
 author:
-  - David A Golden <dagolden@cpan.org>
+  - 'David A Golden <dagolden@cpan.org>'
 abstract: change directory temporarily for a limited scope
 license: perl
 resources:
@@ -17,5 +17,8 @@ requires:
 provides:
   File::pushd:
     file: lib/File/pushd.pm
-    version: 0.32
-generated_by: Module::Build version 0.2703
+    version: 0.99
+generated_by: Module::Build version 0.280501
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2

@@ -12,3 +12,4 @@ t/File_pushd.t
 t/pod.t
 t/pod_coverage.t
 Todo
+lib/File/pushd.pod

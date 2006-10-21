@@ -1,6 +1,6 @@
 package File::pushd;
 
-$VERSION = "0.34";
+$VERSION = "0.99";
 @EXPORT  = qw( pushd tempd );
 @ISA     = qw( Exporter );
 
@@ -19,81 +19,8 @@ use overload
     fallback => 1;
 
 #--------------------------------------------------------------------------#
-# main pod documentation 
-#--------------------------------------------------------------------------#
-
-=head1 NAME
-
-File::pushd - change directory temporarily for a limited scope
-
-=head1 SYNOPSIS
-
- use File::pushd;
-
- chdir $ENV{HOME};
- 
- # change directory again for a limited scope
- {
-     my $dir = pushd( '/tmp' );
-     # working directory changed to /tmp
- }
- # working directory has reverted to $ENV{HOME}
-
- # tempd() is equivalent to pushd( File::Temp::tempdir )
- {
-     my $dir = tempd();
- }
-
- # object stringifies naturally as an absolute path
- {
-    my $dir = pushd( '/tmp' );
-    my $filename = File::Spec->catfile( $dir, "somefile.txt" );
-    # gives /tmp/somefile.txt
- }
-    
-=head1 DESCRIPTION
-
-File::pushd does a temporary C<chdir> that is easily and automatically
-reverted, similar to C<pushd> in some Unix command shells.  It works by
-creating an object that caches the original working directory.  When the object
-is destroyed, the destructor calls C<chdir> to revert to the original working
-directory.  By storing the object in a lexical variable with a limited scope,
-this happens automatically at the end of the scope.
-
-This is very handy when working with temporary directories for tasks like
-testing; a function is provided to streamline getting a temporary
-directory from L<File::Temp>.
-
-For convenience, the object stringifies as the canonical form of the absolute
-pathname of the directory entered.
-
-=head1 USAGE
-
- use File::pushd;
-
-Using File::pushd automatically imports the C<pushd> and C<tempd> functions.
-
-=cut
-
-#--------------------------------------------------------------------------#
 # pushd()
 #--------------------------------------------------------------------------#
-
-=head2 pushd
-
- {
-     my $dir = pushd( $target_directory );
- }
-
-Caches the current working directory, calls C<chdir> to change to the target
-directory, and returns a File::pushd object.  When the object is
-destroyed, the working directory reverts to the original directory.
-
-The provided target directory can be a relative or absolute path. If
-called with no arguments, it uses the current directory as its target and
-returns to the current directory when the object is destroyed.
-
-=cut
 
 sub pushd {
     my ($target_dir) = @_;
@@ -121,19 +48,6 @@ sub pushd {
 # tempd()
 #--------------------------------------------------------------------------#
 
-=head2 tempd
-
- {
-     my $dir = tempd();
- }
-
-This function is like C<pushd> but automatically creates and calls C<chdir> to
-a temporary directory as created by L<File::Temp>. Unlike normal L<File::Temp>
-cleanup which happens at the end of the program, this temporary directory is
-removed when the object is destroyed. (But also see C<preserve>.)  A warning
-will be issued if the directory cannot be removed.
-
-=cut
 
 sub tempd {
     my $dir = pushd( File::Temp::tempdir() );
@@ -141,23 +55,9 @@ sub tempd {
     return $dir;
 }
 
-=head2 preserve 
-
- {
-     my $dir = tempd();
-     $dir->preserve;      # mark to preserve at end of scope
-     $dir->preserve(0);   # mark to delete at end of scope
- }
-
-Controls whether a temporary directory will be cleaned up when the object is
-destroyed.  With no arguments, C<preserve> sets the directory to be preserved.
-With an argument, the directory will be preserved if the argument is true, or
-marked for cleanup if the argument is false.  Only C<tempd> objects may be
-marked for cleanup.  (Target directories to C<pushd> are always preserved.)
-C<preserve> returns true if the directory will be preserved, and false
-otherwise.
-
-=cut
+#--------------------------------------------------------------------------#
+# preserve()
+#--------------------------------------------------------------------------#
 
 sub preserve {
     my $self = shift;
@@ -190,31 +90,130 @@ sub DESTROY {
 1; #this line is important and will help the module return a true value
 __END__
 
-=head1 SEE ALSO
+=begin wikidoc
 
-L<File::chdir>
+= NAME
 
-=head1 BUGS
+File::pushd - change directory temporarily for a limited scope
+
+= VERSION
+
+This documentation describes version %%VERSION%%.
+
+= SYNOPSIS
+
+ use File::pushd;
+
+ chdir $ENV{HOME};
+ 
+ # change directory again for a limited scope
+ {
+     my $dir = pushd( '/tmp' );
+     # working directory changed to /tmp
+ }
+ # working directory has reverted to $ENV{HOME}
+
+ # tempd() is equivalent to pushd( File::Temp::tempdir )
+ {
+     my $dir = tempd();
+ }
+
+ # object stringifies naturally as an absolute path
+ {
+    my $dir = pushd( '/tmp' );
+    my $filename = File::Spec->catfile( $dir, "somefile.txt" );
+    # gives /tmp/somefile.txt
+ }
+    
+= DESCRIPTION
+
+File::pushd does a temporary {chdir} that is easily and automatically
+reverted, similar to {pushd} in some Unix command shells.  It works by
+creating an object that caches the original working directory.  When the object
+is destroyed, the destructor calls {chdir} to revert to the original working
+directory.  By storing the object in a lexical variable with a limited scope,
+this happens automatically at the end of the scope.
+
+This is very handy when working with temporary directories for tasks like
+testing; a function is provided to streamline getting a temporary
+directory from [File::Temp].
+
+For convenience, the object stringifies as the canonical form of the absolute
+pathname of the directory entered.
+
+= USAGE
+
+ use File::pushd;
+
+Using File::pushd automatically imports the {pushd} and {tempd} functions.
+
+== pushd
+
+ {
+     my $dir = pushd( $target_directory );
+ }
+
+Caches the current working directory, calls {chdir} to change to the target
+directory, and returns a File::pushd object.  When the object is
+destroyed, the working directory reverts to the original directory.
+
+The provided target directory can be a relative or absolute path. If
+called with no arguments, it uses the current directory as its target and
+returns to the current directory when the object is destroyed.
+
+== tempd
+
+ {
+     my $dir = tempd();
+ }
+
+This function is like {pushd} but automatically creates and calls {chdir} to
+a temporary directory as created by [File::Temp]. Unlike normal [File::Temp]
+cleanup which happens at the end of the program, this temporary directory is
+removed when the object is destroyed. (But also see {preserve}.)  A warning
+will be issued if the directory cannot be removed.
+
+== preserve 
+
+ {
+     my $dir = tempd();
+     $dir->preserve;      # mark to preserve at end of scope
+     $dir->preserve(0);   # mark to delete at end of scope
+ }
+
+Controls whether a temporary directory will be cleaned up when the object is
+destroyed.  With no arguments, {preserve} sets the directory to be preserved.
+With an argument, the directory will be preserved if the argument is true, or
+marked for cleanup if the argument is false.  Only {tempd} objects may be
+marked for cleanup.  (Target directories to {pushd} are always preserved.)
+{preserve} returns true if the directory will be preserved, and false
+otherwise.
+
+= SEE ALSO
+
+* [File::chdir]
+
+= BUGS
 
 Please report any bugs or feature using the CPAN Request Tracker.  
-Bugs can be submitted by email to C<bug-File-pushd@rt.cpan.org> or 
+Bugs can be submitted by email to {bug-File-pushd@rt.cpan.org} or 
 through the web interface at 
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd>
+[http://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd]
 
 When submitting a bug or request, please include a test-file or a patch to an
 existing test-file that illustrates the bug or desired feature.
 
-=head1 AUTHOR
+= AUTHOR
 
 David A Golden (DAGOLDEN)
 
 dagolden@cpan.org
 
-L<http://dagolden.com/>
+[http://dagolden.com/]
 
-=head1 COPYRIGHT
+= COPYRIGHT
 
-Copyright (c) 2005 by David A Golden
+Copyright (c) 2005, 2006 by David A Golden
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
@@ -222,7 +221,7 @@ it and/or modify it under the same terms as Perl itself.
 The full text of the license can be found in the
 LICENSE file included with this module.
 
-=head1 DISCLAIMER OF WARRANTY
+= DISCLAIMER OF WARRANTY
 
 BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
 FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
@@ -245,4 +244,5 @@ FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
 SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGES.
 
-=cut
+=end wikidoc
+

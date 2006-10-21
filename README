@@ -1,29 +1,32 @@
 NAME
     File::pushd - change directory temporarily for a limited scope
 
+VERSION
+    This documentation describes version 0.99.
+
 SYNOPSIS
-     use File::pushd;
-
-     chdir $ENV{HOME};
+      use File::pushd;
      
- # change directory again for a limited scope
-     {
+  chdir $ENV{HOME};
+     
+  # change directory again for a limited scope
+      {
+          my $dir = pushd( '/tmp' );
+          # working directory changed to /tmp
+      }
+      # working directory has reverted to $ENV{HOME}
+     
+  # tempd() is equivalent to pushd( File::Temp::tempdir )
+      {
+          my $dir = tempd();
+      }
+     
+  # object stringifies naturally as an absolute path
+      {
          my $dir = pushd( '/tmp' );
-         # working directory changed to /tmp
-     }
-     # working directory has reverted to $ENV{HOME}
-
-     # tempd() is equivalent to pushd( File::Temp::tempdir )
-     {
-         my $dir = tempd();
-     }
-
-     # object stringifies naturally as an absolute path
-     {
-        my $dir = pushd( '/tmp' );
-        my $filename = File::Spec->catfile( $dir, "somefile.txt" );
-        # gives /tmp/somefile.txt
-     }
+         my $filename = File::Spec->catfile( $dir, "somefile.txt" );
+         # gives /tmp/somefile.txt
+      }
 
 DESCRIPTION
     File::pushd does a temporary "chdir" that is easily and automatically
@@ -42,15 +45,15 @@ DESCRIPTION
     absolute pathname of the directory entered.
 
 USAGE
-     use File::pushd;
+      use File::pushd;
 
     Using File::pushd automatically imports the "pushd" and "tempd"
     functions.
 
   pushd
-     {
-         my $dir = pushd( $target_directory );
-     }
+      {
+          my $dir = pushd( $target_directory );
+      }
 
     Caches the current working directory, calls "chdir" to change to the
     target directory, and returns a File::pushd object. When the object is
@@ -61,9 +64,9 @@ USAGE
     and returns to the current directory when the object is destroyed.
 
   tempd
-     {
-         my $dir = tempd();
-     }
+      {
+          my $dir = tempd();
+      }
 
     This function is like "pushd" but automatically creates and calls
     "chdir" to a temporary directory as created by File::Temp. Unlike normal
@@ -73,11 +76,11 @@ USAGE
     removed.
 
   preserve
-     {
-         my $dir = tempd();
-         $dir->preserve;      # mark to preserve at end of scope
-         $dir->preserve(0);   # mark to delete at end of scope
-     }
+      {
+          my $dir = tempd();
+          $dir->preserve;      # mark to preserve at end of scope
+          $dir->preserve(0);   # mark to delete at end of scope
+      }
 
     Controls whether a temporary directory will be cleaned up when the
     object is destroyed. With no arguments, "preserve" sets the directory to
@@ -88,11 +91,13 @@ USAGE
     will be preserved, and false otherwise.
 
 SEE ALSO
-    File::chdir
+    *   File::chdir
 
 BUGS
-    Please report bugs using the CPAN Request Tracker at
-    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-pushd>
+    Please report any bugs or feature using the CPAN Request Tracker. Bugs
+    can be submitted by email to "bug-File-pushd@rt.cpan.org" or through the
+    web interface at
+    <http://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd>
 
     When submitting a bug or request, please include a test-file or a patch
     to an existing test-file that illustrates the bug or desired feature.
@@ -105,11 +110,33 @@ AUTHOR
     <http://dagolden.com/>
 
 COPYRIGHT
-    Copyright (c) 2005 by David A Golden
+    Copyright (c) 2005, 2006 by David A Golden
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
     The full text of the license can be found in the LICENSE file included
     with this module.
+
+DISCLAIMER OF WARRANTY
+    BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+    FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+    OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+    PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+    ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+    YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+    NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+    IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+    WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+    REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE
+    TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+    CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+    SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+    RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+    FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+    SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+    DAMAGES.
 

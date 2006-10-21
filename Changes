@@ -1,7 +1,8 @@
 Revision history for Perl module File::pushd
 
-0.34 in progress
-    - updated Pod
+0.99 Sat Oct 21 08:56:07 EDT 2006
+    - bumped version for pre-release before 1.00
+    - updated Pod and converted to wikidoc style
     - added example directory
 
 0.32 Sat Feb  4 23:41:33 EST 2006
