@@ -2,10 +2,11 @@
 use strict;
 #use warnings;
 
-use Test::More tests =>  34 ;
+use Test::More tests =>  37 ;
 use File::Path 'rmtree';
 use Cwd 'abs_path';
 use File::Spec::Functions qw( catdir curdir updir canonpath rootdir ); 
+use File::Temp;
 
 # abs_path necessary to pick up the volume on Win32, e.g. C:\
 sub absdir { canonpath( abs_path( shift || curdir() ) ); }
@@ -64,6 +65,9 @@ is( absdir(), $original_dir,
 );
 
 #--------------------------------------------------------------------------#
+
+
+
 # Test changing to absolute path directory and reverting
 #--------------------------------------------------------------------------#
 
@@ -155,6 +159,32 @@ is( absdir(), $original_dir,
 );
 
 ok( -e $temp_dir, "temporary directory preserved" );
+
+ok( rmtree( $temp_dir ), "temporary directory manually cleaned up" ); 
+
+#--------------------------------------------------------------------------#
+# Test changing to temporary dir but preserving it *outside the process*
+#--------------------------------------------------------------------------#
+
+my $program_file = File::Temp->new();
+my $lib = absdir("lib");
+
+print {$program_file} <<"END_PROGRAM";
+use lib "$lib";
+use File::pushd;
+my \$tempd = tempd() or exit;
+\$tempd->preserve(1);
+print "\$tempd\n";
+END_PROGRAM
+
+$program_file->close;
+
+$temp_dir = `$^X $program_file`;
+chomp($temp_dir);
+
+ok( length $temp_dir, "got a temp directory name from subproces" );
+
+ok( -e $temp_dir, "temporary directory preserved outside subprocess" );
 
 ok( rmtree( $temp_dir ), "temporary directory manually cleaned up" ); 
 

@@ -1,6 +1,6 @@
 package File::pushd;
 
-$VERSION = "0.99";
+$VERSION = '1.00';
 @EXPORT  = qw( pushd tempd );
 @ISA     = qw( Exporter );
 
@@ -33,7 +33,7 @@ sub pushd {
     croak "Can't locate directory $dest: $@" if $@;
     
     if ($dest ne $orig) { 
-        chdir $dest or croak "Can't chdir to $dest: $!";
+        chdir $dest or croak "Can't chdir to $dest\: $!";
     }
 
     my $self = bless { 
@@ -48,9 +48,8 @@ sub pushd {
 # tempd()
 #--------------------------------------------------------------------------#
 
-
 sub tempd {
-    my $dir = pushd( File::Temp::tempdir() );
+    my $dir = pushd( File::Temp::tempdir( CLEANUP => 0 ) );
     $dir->{_tempd} = 1;
     return $dir;
 }

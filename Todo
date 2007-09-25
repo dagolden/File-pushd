@@ -1,4 +1,4 @@
 TODO list for Perl module File::pushd
 
-- Nothing yet
-
+- use tempdir with CLEANUP=>0 so we can actually preserve directories
+  (have to test using a subprocess to confirm that it works)

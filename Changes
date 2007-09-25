@@ -1,5 +1,8 @@
 Revision history for Perl module File::pushd
 
+0.99_01
+    - preserve tempd() beyond process end (File::Temp CLEANUP=>0)
+
 0.99 Sat Oct 21 08:56:07 EDT 2006
     - bumped version for pre-release before 1.00
     - updated Pod and converted to wikidoc style
