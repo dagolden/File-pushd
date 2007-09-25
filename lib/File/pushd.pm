@@ -30,7 +30,7 @@ sub pushd {
     my $dest;
     eval { $dest   = $target_dir ? abs_path( $target_dir ) : $orig };
     
-    croak "Can't locate directory $dest: $@" if $@;
+    croak "Can't locate directory $target_dir: $@" if $@;
     
     if ($dest ne $orig) { 
         chdir $dest or croak "Can't chdir to $dest\: $!";
