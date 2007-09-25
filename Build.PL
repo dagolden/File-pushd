@@ -61,7 +61,7 @@ SUBCLASS
 $class->new( 
     module_name         => 'File::pushd',
     dist_author         => 'David A Golden <dagolden@cpan.org>',
-    license             => 'perl',
+    license             => 'apache',
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires            => {

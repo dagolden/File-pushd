@@ -2,6 +2,7 @@ Build.PL
 Changes
 examples/example.pl
 lib/File/pushd.pm
+lib/File/pushd.pod
 LICENSE
 Makefile.PL
 MANIFEST
@@ -9,7 +10,6 @@ MANIFEST.SKIP
 META.yml
 README
 t/File_pushd.t
-t/pod.t
-t/pod_coverage.t
 Todo
-lib/File/pushd.pod
+xt/pod.t
+xt/pod_coverage.t
