@@ -6,7 +6,7 @@ $VERSION = '1.01';
 
 use 5.004;
 use strict;
-#use warnings;
+BEGIN{ if (not $] < 5.006) { require warnings; warnings->import } }
 use Exporter;
 use Carp;
 use Cwd         qw( cwd abs_path );
