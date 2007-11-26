@@ -1,5 +1,10 @@
 Revision history for Perl module File::pushd
 
+1.01
+    - updated docs to clarify that pushd() and tempd() croak on errors
+    - if tempd() croaks, error appears at tempd()'s caller, not from within
+      tempd() itself
+    
 1.00 Tue Sep 25 08:19:30 EDT 2007
     - changed to the Apache License, version 2.0; (it's clearer, relicensable,
       and is explicit about contributions)

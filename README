@@ -2,7 +2,7 @@ NAME
     File::pushd - change directory temporarily for a limited scope
 
 VERSION
-    This documentation describes version 1.00.
+    This documentation describes version 1.01.
 
 SYNOPSIS
       use File::pushd;
@@ -63,6 +63,9 @@ USAGE
     called with no arguments, it uses the current directory as its target
     and returns to the current directory when the object is destroyed.
 
+    If the target directory does not exist or if the directory change fails
+    for some reason, "pushd" will die with an error message.
+
   tempd
       {
           my $dir = tempd();
@@ -74,6 +77,8 @@ USAGE
     temporary directory is removed when the object is destroyed. (But also
     see "preserve".) A warning will be issued if the directory cannot be
     removed.
+
+    As with "pushd", "tempd" will die if "chdir" fails.
 
   preserve
       {

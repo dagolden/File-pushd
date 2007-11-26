@@ -1,6 +1,6 @@
 package File::pushd;
 
-$VERSION = '1.00';
+$VERSION = '1.01';
 @EXPORT  = qw( pushd tempd );
 @ISA     = qw( Exporter );
 
@@ -49,7 +49,9 @@ sub pushd {
 #--------------------------------------------------------------------------#
 
 sub tempd {
-    my $dir = pushd( File::Temp::tempdir( CLEANUP => 0 ) );
+    my $dir;
+    eval { $dir = pushd( File::Temp::tempdir( CLEANUP => 0 ) ) };
+    croak $@ if $@;
     $dir->{_tempd} = 1;
     return $dir;
 }
@@ -160,6 +162,9 @@ The provided target directory can be a relative or absolute path. If
 called with no arguments, it uses the current directory as its target and
 returns to the current directory when the object is destroyed.
 
+If the target directory does not exist or if the directory change fails 
+for some reason, {pushd} will die with an error message.
+
 == tempd
 
  {
@@ -171,6 +176,8 @@ a temporary directory created by [File::Temp]. Unlike normal [File::Temp]
 cleanup which happens at the end of the program, this temporary directory is
 removed when the object is destroyed. (But also see {preserve}.)  A warning
 will be issued if the directory cannot be removed.
+
+As with {pushd}, {tempd} will die if {chdir} fails.
 
 == preserve 
 

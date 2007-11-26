@@ -1,6 +1,6 @@
 ---
 name: File-pushd
-version: 1.00
+version: 1.01
 author:
   - 'David A Golden <dagolden@cpan.org>'
 abstract: change directory temporarily for a limited scope
@@ -17,7 +17,7 @@ requires:
 provides:
   File::pushd:
     file: lib/File/pushd.pm
-    version: 1.00
+    version: 1.01
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
