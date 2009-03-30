@@ -6,7 +6,7 @@ author:
 abstract: change directory temporarily for a limited scope
 license: apache
 resources:
-  license: http://apache.org/licenses/LICENSE-2.0
+  license: http://www.apache.org/licenses/LICENSE-2.0.txt
 requires:
   Cwd: 0
   File::Path: 0
@@ -18,7 +18,7 @@ provides:
   File::pushd:
     file: lib/File/pushd.pm
     version: 1.01
-generated_by: Module::Build version 0.2808
+generated_by: Module::Build version 0.32
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2

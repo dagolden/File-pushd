@@ -6,22 +6,22 @@ VERSION
 
 SYNOPSIS
       use File::pushd;
- 
-      chdir $ENV{HOME};
- 
-      # change directory again for a limited scope
+     
+  chdir $ENV{HOME};
+     
+  # change directory again for a limited scope
       {
           my $dir = pushd( '/tmp' );
           # working directory changed to /tmp
       }
       # working directory has reverted to $ENV{HOME}
- 
-      # tempd() is equivalent to pushd( File::Temp::tempdir )
+     
+  # tempd() is equivalent to pushd( File::Temp::tempdir )
       {
           my $dir = tempd();
       }
- 
-      # object stringifies naturally as an absolute path
+     
+  # object stringifies naturally as an absolute path
       {
          my $dir = pushd( '/tmp' );
          my $filename = File::Spec->catfile( $dir, "somefile.txt" );
