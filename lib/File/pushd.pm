@@ -178,10 +178,12 @@ If the target directory does not exist or if the directory change fails
 for some reason, {pushd} will die with an error message.
 
 Can be given a hashref as an optional second argument.  The only supported
-option is C<untaint_pattern>, which is used to untaint file paths involved.
-It defaults to C<qr{^([-+@\w./]+)$}>, which is reasonably restrictive (e.g.
+option is {untaint_pattern}, which is used to untaint file paths involved.
+It defaults to {qr{^([-+@\w./]+)$}}, which is reasonably restrictive (e.g.
 it does not even allow spaces in the path).  Change this to suit your
-circumstances and security needs if running under taint mode.
+circumstances and security needs if running under taint mode. *Note*: you
+must include the parentheses in the pattern to capture the untainted
+portion of the path.
 
 == tempd
 
