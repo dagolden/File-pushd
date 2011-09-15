@@ -177,6 +177,12 @@ returns to the current directory when the object is destroyed.
 If the target directory does not exist or if the directory change fails
 for some reason, {pushd} will die with an error message.
 
+Can be given a hashref as an optional second argument.  The only supported
+option is C<untaint_pattern>, which is used to untaint file paths involved.
+It defaults to C<qr{^([-+@\w./]+)$}>, which is reasonably restrictive (e.g.
+it does not even allow spaces in the path).  Change this to suit your
+circumstances and security needs if running under taint mode.
+
 == tempd
 
  {
@@ -190,6 +196,9 @@ removed when the object is destroyed. (But also see {preserve}.)  A warning
 will be issued if the directory cannot be removed.
 
 As with {pushd}, {tempd} will die if {chdir} fails.
+
+It may be given a single options hash that will be passed internally
+to C<pushd>.
 
 == preserve
 
