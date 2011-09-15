@@ -16,7 +16,7 @@ use File::Path  qw( rmtree );
 use File::Temp  qw();
 use File::Spec;
 
-use overload 
+use overload
     q{""} => sub { File::Spec->canonpath( $_[0]->{_pushd} ) },
     fallback => 1;
 
@@ -27,7 +27,7 @@ use overload
 sub pushd {
     my ($target_dir, $options) = @_;
     $options->{untaint_pattern} ||= qr{^([-+@\w./]+)$};
-    
+
     my $tainted_orig = cwd;
     my $orig;
     if ( $tainted_orig =~ $options->{untaint_pattern} ) {
@@ -36,7 +36,7 @@ sub pushd {
     else {
       $orig = $tainted_orig;
     }
-    
+
     my $tainted_dest;
     eval { $tainted_dest   = $target_dir ? abs_path( $target_dir ) : $orig };
 
@@ -47,14 +47,14 @@ sub pushd {
     else {
       $dest = $tainted_dest;
     }
-    
+
     croak "Can't locate directory $target_dir: $@" if $@;
-    
-    if ($dest ne $orig) { 
+
+    if ($dest ne $orig) {
         chdir $dest or croak "Can't chdir to $dest\: $!";
     }
 
-    my $self = bless { 
+    my $self = bless {
         _pushd => $dest,
         _original => $orig
     }, __PACKAGE__;
@@ -89,7 +89,7 @@ sub preserve {
         return $self->{_preserve} = $_[0] ? 1 : 0;
     }
 }
-    
+
 #--------------------------------------------------------------------------#
 # DESTROY()
 # Revert to original directory as object is destroyed and cleanup
@@ -100,7 +100,7 @@ sub DESTROY {
     my ($self) = @_;
     my $orig = $self->{_original};
     chdir $orig if $orig; # should always be so, but just in case...
-    if ( $self->{_tempd} && 
+    if ( $self->{_tempd} &&
         !$self->{_preserve} ) {
         eval { rmtree( $self->{_pushd} ) };
         carp $@ if $@;
@@ -118,7 +118,7 @@ __END__
  use File::pushd;
 
  chdir $ENV{HOME};
- 
+
  # change directory again for a limited scope
  {
      my $dir = pushd( '/tmp' );
@@ -137,7 +137,7 @@ __END__
     my $filename = File::Spec->catfile( $dir, "somefile.txt" );
     # gives /tmp/somefile.txt
  }
-    
+
 = DESCRIPTION
 
 File::pushd does a temporary {chdir} that is easily and automatically
@@ -174,7 +174,7 @@ The provided target directory can be a relative or absolute path. If
 called with no arguments, it uses the current directory as its target and
 returns to the current directory when the object is destroyed.
 
-If the target directory does not exist or if the directory change fails 
+If the target directory does not exist or if the directory change fails
 for some reason, {pushd} will die with an error message.
 
 == tempd
@@ -191,7 +191,7 @@ will be issued if the directory cannot be removed.
 
 As with {pushd}, {tempd} will die if {chdir} fails.
 
-== preserve 
+== preserve
 
  {
      my $dir = tempd();
