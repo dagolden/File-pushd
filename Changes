@@ -1,6 +1,7 @@
 Revision history for Perl module File::pushd
 
-1.01
+{{$NEXT}}
+
     - updated docs to clarify that pushd() and tempd() croak on errors
     - if tempd() croaks, error appears at tempd()'s caller, not from within
       tempd() itself
