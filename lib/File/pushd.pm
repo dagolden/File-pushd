@@ -1,4 +1,4 @@
-use 5.004;
+use 5.005;
 use strict;
 BEGIN{ if (not $] < 5.006) { require warnings; warnings->import } }
 package File::pushd;
@@ -25,12 +25,28 @@ use overload
 #--------------------------------------------------------------------------#
 
 sub pushd {
-    my ($target_dir) = @_;
+    my ($target_dir, $options) = @_;
+    $options->{untaint_pattern} ||= qr{^([-+@\w./]+)$};
     
-    my $orig = cwd;
+    my $tainted_orig = cwd;
+    my $orig;
+    if ( $tainted_orig =~ $options->{untaint_pattern} ) {
+      $orig = $1;
+    }
+    else {
+      $orig = $tainted_orig;
+    }
     
+    my $tainted_dest;
+    eval { $tainted_dest   = $target_dir ? abs_path( $target_dir ) : $orig };
+
     my $dest;
-    eval { $dest   = $target_dir ? abs_path( $target_dir ) : $orig };
+    if ( $tainted_dest =~ $options->{untaint_pattern} ) {
+      $dest = $1;
+    }
+    else {
+      $dest = $tainted_dest;
+    }
     
     croak "Can't locate directory $target_dir: $@" if $@;
     
@@ -51,8 +67,9 @@ sub pushd {
 #--------------------------------------------------------------------------#
 
 sub tempd {
+    my ($options) = @_;
     my $dir;
-    eval { $dir = pushd( File::Temp::tempdir( CLEANUP => 0 ) ) };
+    eval { $dir = pushd( File::Temp::tempdir( CLEANUP => 0 ), $options ) };
     croak $@ if $@;
     $dir->{_tempd} = 1;
     return $dir;

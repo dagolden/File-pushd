@@ -6,6 +6,7 @@ Revision history for Perl module File::pushd
     - if tempd() croaks, error appears at tempd()'s caller, not from within
       tempd() itself
     - warnings enabled if perl version >= 5.006
+    - adds 'untaint_pattern' option with a passable default
     
 1.00 Tue Sep 25 08:19:30 EDT 2007
     - changed to the Apache License, version 2.0; (it's clearer, relicensable,

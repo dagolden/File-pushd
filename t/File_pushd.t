@@ -2,8 +2,9 @@
 use strict;
 #use warnings;
 
-use Test::More tests =>  37 ;
+use Test::More tests =>  39 ;
 use File::Path 'rmtree';
+use File::Basename 'dirname';
 use Cwd 'abs_path';
 use File::Spec::Functions qw( catdir curdir updir canonpath rootdir ); 
 use File::Temp;
@@ -107,6 +108,18 @@ is( absdir(), $original_dir,
 );
 
 #--------------------------------------------------------------------------#
+# Test with options
+#--------------------------------------------------------------------------#
+
+$new_dir = pushd($expected_dir , { untaint_pattern => qr{^([-\w./]+)$} } );
+is( absdir(), $expected_dir, "change directory on pushd (custom untaint)" );
+undef $new_dir;
+is( absdir(), $original_dir,
+    "revert directory when variable goes out of scope"
+);
+
+
+#--------------------------------------------------------------------------#
 # Test changing in place
 #--------------------------------------------------------------------------#
 
@@ -179,14 +192,23 @@ END_PROGRAM
 
 $program_file->close;
 
-$temp_dir = `$^X $program_file`;
+{
+  delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
+  $^X =~ m{(.*)[\\/]perl.*$};
+  $ENV{PATH} = $1; # for taint mode
+  $temp_dir = `$^X $program_file`;
+}
+
 chomp($temp_dir);
 
-ok( length $temp_dir, "got a temp directory name from subproces" );
+$temp_dir =~ /(.*)/;
+my $clean_tmp = $1;
 
-ok( -e $temp_dir, "temporary directory preserved outside subprocess" );
+ok( length $clean_tmp, "got a temp directory name from subproces" );
 
-ok( rmtree( $temp_dir ), "temporary directory manually cleaned up" ); 
+ok( -e $clean_tmp, "temporary directory preserved outside subprocess" );
+
+ok( rmtree( $clean_tmp ), "temporary directory manually cleaned up" ); 
 
 #--------------------------------------------------------------------------#
 # Test changing to temporary dir, preserve it, then revert
