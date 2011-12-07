@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.002     2011-12-07 11:40:26 EST5EDT
+
     [BUG FIXES]
 
     - Fix failures on cygwin [rt.cpan.org #73072 Reini Urban]
