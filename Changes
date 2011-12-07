@@ -2,6 +2,10 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+    [BUG FIXES]
+
+    - Fix failures on cygwin [rt.cpan.org #73072 Reini Urban]
+
 1.001     2011-09-14 22:49:56 America/New_York
 
     - updated docs to clarify that pushd() and tempd() croak on errors

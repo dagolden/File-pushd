@@ -39,6 +39,7 @@ sub pushd {
 
     my $tainted_dest;
     eval { $tainted_dest   = $target_dir ? abs_path( $target_dir ) : $orig };
+    croak "Can't locate directory $target_dir: $@" if $@;
 
     my $dest;
     if ( $tainted_dest =~ $options->{untaint_pattern} ) {
@@ -47,8 +48,6 @@ sub pushd {
     else {
       $dest = $tainted_dest;
     }
-
-    croak "Can't locate directory $target_dir: $@" if $@;
 
     if ($dest ne $orig) {
         chdir $dest or croak "Can't chdir to $dest\: $!";

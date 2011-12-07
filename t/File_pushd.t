@@ -196,6 +196,7 @@ $program_file->close;
   delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
   $^X =~ m{(.*)[\\/]perl.*$};
   $ENV{PATH} = $1; # for taint mode
+  $ENV{PATH} = "$1:/usr/bin" if $^O eq 'cygwin';
   $temp_dir = `$^X $program_file`;
 }
 
