@@ -192,13 +192,14 @@ END_PROGRAM
 
 $program_file->close;
 
-{
-  delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
-  $^X =~ m{(.*)[\\/]perl.*$};
-  $ENV{PATH} = $1; # for taint mode
-  $ENV{PATH} = "$1:/usr/bin" if $^O eq 'cygwin';
-  $temp_dir = `$^X $program_file`;
+# for when I manually test with "perl -t", must untaint things
+for my $key (qw(IFS CDPATH ENV BASH_ENV PATH)) {
+    next unless defined $ENV{$key};
+    $ENV{$key} =~ /^(.*)$/;
+    $ENV{$key} = $1;
 }
+
+$temp_dir = `$^X $program_file`;
 
 chomp($temp_dir);
 
