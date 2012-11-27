@@ -4,7 +4,7 @@
       "David A Golden <dagolden@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300002, CPAN::Meta::Converter version 2.112580",
+   "generated_by" : "Dist::Zilla version 4.300025, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "apache_2_0"
    ],
@@ -32,47 +32,47 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
-            "Cwd" : 0,
-            "Exporter" : 0,
-            "File::Path" : 0,
-            "File::Spec" : 0,
-            "File::Temp" : 0,
-            "overload" : 0,
+            "Carp" : "0",
+            "Cwd" : "0",
+            "Exporter" : "0",
+            "File::Path" : "0",
+            "File::Spec" : "0",
+            "File::Temp" : "0",
+            "overload" : "0",
             "perl" : "5.005",
-            "strict" : 0,
-            "vars" : 0,
-            "warnings" : 0
+            "strict" : "0",
+            "vars" : "0",
+            "warnings" : "0"
          }
       },
       "test" : {
          "requires" : {
-            "File::Basename" : 0,
-            "File::Find" : 0,
-            "File::Spec::Functions" : 0,
-            "Test::More" : 0
+            "File::Basename" : "0",
+            "File::Find" : "0",
+            "File::Spec::Functions" : "0",
+            "Test::More" : "0"
          }
       }
    },
    "provides" : {
       "File::pushd" : {
          "file" : "lib/File/pushd.pm",
-         "version" : "1.002"
+         "version" : "1.003"
       }
    },
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "mailto" : "bug-file-pushd at rt.cpan.org",
-         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd"
+         "mailto" : "bug-File-pushd@rt.cpan.org",
+         "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd"
       },
-      "homepage" : "https://github.com/dagolden/file-pushd",
+      "homepage" : "https://metacpan.org/release/File-pushd",
       "repository" : {
          "type" : "git",
-         "url" : "https://github.com/dagolden/file-pushd.git",
+         "url" : "git://github.com/dagolden/file-pushd.git",
          "web" : "https://github.com/dagolden/file-pushd"
       }
    },
-   "version" : "1.002"
+   "version" : "1.003"
 }
 
