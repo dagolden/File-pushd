@@ -100,12 +100,12 @@ sub DESTROY {
     chdir $orig if $orig; # should always be so, but just in case...
     if ( $self->{_tempd} &&
         !$self->{_preserve} ) {
-	# don't destroy existing $@ if there is no error.
-	my $err = do {
-	    local $@;
-	    eval { rmtree( $self->{_pushd} ) };
-	    $@;
-	};
+        # don't destroy existing $@ if there is no error.
+        my $err = do {
+            local $@;
+            eval { rmtree( $self->{_pushd} ) };
+            $@;
+        };
         carp $err if $err;
     }
 }
