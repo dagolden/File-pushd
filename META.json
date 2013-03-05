@@ -49,7 +49,6 @@
             "overload" : "0",
             "perl" : "5.006",
             "strict" : "0",
-            "vars" : "0",
             "warnings" : "0"
          }
       },

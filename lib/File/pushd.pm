@@ -4,9 +4,8 @@ package File::pushd;
 # ABSTRACT: change directory temporarily for a limited scope
 # VERSION
 
-use vars qw/@EXPORT @ISA/;
-@EXPORT  = qw( pushd tempd );
-@ISA     = qw( Exporter );
+our @EXPORT  = qw( pushd tempd );
+our @ISA     = qw( Exporter );
 
 use Exporter;
 use Carp;
