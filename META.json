@@ -1,10 +1,10 @@
 {
    "abstract" : "change directory temporarily for a limited scope",
    "author" : [
-      "David A Golden <dagolden@cpan.org>"
+      "David Golden <dagolden@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300025, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Dist::Zilla version 4.300030, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "apache_2_0"
    ],
@@ -30,6 +30,14 @@
             "ExtUtils::MakeMaker" : "6.30"
          }
       },
+      "develop" : {
+         "requires" : {
+            "Pod::Coverage::TrustPod" : "0",
+            "Test::CPAN::Meta" : "0",
+            "Test::Pod" : "1.41",
+            "Test::Pod::Coverage" : "1.08"
+         }
+      },
       "runtime" : {
          "requires" : {
             "Carp" : "0",
@@ -39,7 +47,7 @@
             "File::Spec" : "0",
             "File::Temp" : "0",
             "overload" : "0",
-            "perl" : "5.005",
+            "perl" : "5.006",
             "strict" : "0",
             "vars" : "0",
             "warnings" : "0"
@@ -47,9 +55,11 @@
       },
       "test" : {
          "requires" : {
+            "ExtUtils::MakeMaker" : "0",
             "File::Basename" : "0",
             "File::Find" : "0",
             "File::Spec::Functions" : "0",
+            "List::Util" : "0",
             "Test::More" : "0"
          }
       }
@@ -57,14 +67,13 @@
    "provides" : {
       "File::pushd" : {
          "file" : "lib/File/pushd.pm",
-         "version" : "1.003"
+         "version" : "1.004"
       }
    },
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "mailto" : "bug-File-pushd@rt.cpan.org",
-         "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd"
+         "web" : "https://github.com/dagolden/file-pushd/issues"
       },
       "homepage" : "https://metacpan.org/release/File-pushd",
       "repository" : {
@@ -73,6 +82,6 @@
          "web" : "https://github.com/dagolden/file-pushd"
       }
    },
-   "version" : "1.003"
+   "version" : "1.004"
 }
 

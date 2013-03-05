@@ -6,7 +6,7 @@ File::pushd - change directory temporarily for a limited scope
 
 =head1 VERSION
 
-version 1.003
+version 1.004
 
 =head1 SYNOPSIS
 
@@ -130,7 +130,7 @@ L<File::chdir>
 =head2 Bugs / Feature Requests
 
 Please report any bugs or feature requests through the issue tracker
-at L<https://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd>.
+at L<https://github.com/dagolden/file-pushd/issues>.
 You will be notified automatically of any progress on your issue.
 
 =head2 Source Code
@@ -144,11 +144,11 @@ L<https://github.com/dagolden/file-pushd>
 
 =head1 AUTHOR
 
-David A Golden <dagolden@cpan.org>
+David Golden <dagolden@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 by David A Golden.
+This software is Copyright (c) 2013 by David A Golden.
 
 This is free software, licensed under:
 

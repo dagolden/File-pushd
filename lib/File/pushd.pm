@@ -1,6 +1,5 @@
-use 5.005;
 use strict;
-BEGIN{ if (not $] < 5.006) { require warnings; warnings->import } }
+use warnings;
 package File::pushd;
 # ABSTRACT: change directory temporarily for a limited scope
 # VERSION
