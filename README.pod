@@ -146,6 +146,10 @@ L<https://github.com/dagolden/file-pushd>
 
 David Golden <dagolden@cpan.org>
 
+=head1 CONTRIBUTOR
+
+Diab Jerius <djerius@cfa.harvard.edu>
+
 =head1 COPYRIGHT AND LICENSE
 
 This software is Copyright (c) 2013 by David A Golden.

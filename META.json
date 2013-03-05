@@ -82,6 +82,9 @@
          "web" : "https://github.com/dagolden/file-pushd"
       }
    },
-   "version" : "1.004"
+   "version" : "1.004",
+   "x_contributors" : [
+      "Diab Jerius <djerius@cfa.harvard.edu>"
+   ]
 }
 

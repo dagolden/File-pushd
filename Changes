@@ -2,6 +2,10 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+    [BUG FIXES]
+
+    - Object destruction won't clobber $@
+
     [SUPPORT]
 
     - Changed issue tracker to Github
