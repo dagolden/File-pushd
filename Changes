@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.004     2013-03-05 17:59:08 America/New_York
+
     [BUG FIXES]
 
     - Object destruction won't clobber $@
