@@ -26,6 +26,9 @@ sub pushd {
     my ($target_dir, $options) = @_;
     $options->{untaint_pattern} ||= qr{^([-+@\w./]+)$};
 
+    $target_dir = "." unless defined $target_dir;
+    croak "Can't locate directory $target_dir" unless -d $target_dir;
+
     my $tainted_orig = cwd;
     my $orig;
     if ( $tainted_orig =~ $options->{untaint_pattern} ) {
@@ -37,7 +40,7 @@ sub pushd {
 
     my $tainted_dest;
     eval { $tainted_dest   = $target_dir ? abs_path( $target_dir ) : $orig };
-    croak "Can't locate directory $target_dir: $@" if $@;
+    croak "Can't locate absolute path for $target_dir: $@" if $@;
 
     my $dest;
     if ( $tainted_dest =~ $options->{untaint_pattern} ) {
