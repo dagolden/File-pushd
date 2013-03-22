@@ -9,7 +9,7 @@ our @ISA     = qw( Exporter );
 
 use Exporter;
 use Carp;
-use Cwd         qw( cwd abs_path );
+use Cwd         qw( getcwd abs_path );
 use File::Path  qw( rmtree );
 use File::Temp  qw();
 use File::Spec;
@@ -29,7 +29,7 @@ sub pushd {
     $target_dir = "." unless defined $target_dir;
     croak "Can't locate directory $target_dir" unless -d $target_dir;
 
-    my $tainted_orig = cwd;
+    my $tainted_orig = getcwd;
     my $orig;
     if ( $tainted_orig =~ $options->{untaint_pattern} ) {
       $orig = $1;
