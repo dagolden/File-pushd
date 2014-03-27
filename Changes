@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.006     2014-03-27 15:29:36-04:00 America/New_York
+
     [DOCUMENTED]
 
     - Noted that multiple pushd objects in a lexical scope are not
