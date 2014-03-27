@@ -4,8 +4,8 @@ use Test::More;
 use File::pushd;
 
 eval {
-     my $dir = tempd;
-     die( "error\n" );
+    my $dir = tempd;
+    die("error\n");
 };
 
 my $err = $@;
