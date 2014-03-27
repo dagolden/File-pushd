@@ -2,10 +2,14 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
-    [DOCUMENTATION]
+    [DOCUMENTED]
 
     - Noted that multiple pushd objects in a lexical scope are not
       destroyed in a predictable order
+
+    [CHANGED]
+
+    - Modernized Dist::Zilla configuration and repo support files
 
 1.005     2013-03-22 09:58:20 America/New_York
 
