@@ -157,6 +157,10 @@ directory from L<File::Temp>.
 For convenience, the object stringifies as the canonical form of the absolute
 pathname of the directory entered.
 
+B<Warning>: if you create multiple C<pushd> objects in the same lexical scope,
+their destruction order is not guaranteed and you might not wind up in the
+directory you expect.
+
 =head1 USAGE
 
  use File::pushd;

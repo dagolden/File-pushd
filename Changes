@@ -2,6 +2,11 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+    [DOCUMENTATION]
+
+    - Noted that multiple pushd objects in a lexical scope are not
+      destroyed in a predictable order
+
 1.005     2013-03-22 09:58:20 America/New_York
 
     [BUG FIXES]
