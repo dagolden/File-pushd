@@ -116,9 +116,7 @@ sub DESTROY {
 
 __END__
 
-=begin wikidoc
-
-= SYNOPSIS
+=head1 SYNOPSIS
 
  use File::pushd;
 
@@ -143,35 +141,35 @@ __END__
     # gives /tmp/somefile.txt
  }
 
-= DESCRIPTION
+=head1 DESCRIPTION
 
-File::pushd does a temporary {chdir} that is easily and automatically
-reverted, similar to {pushd} in some Unix command shells.  It works by
+File::pushd does a temporary C<chdir> that is easily and automatically
+reverted, similar to C<pushd> in some Unix command shells.  It works by
 creating an object that caches the original working directory.  When the object
-is destroyed, the destructor calls {chdir} to revert to the original working
+is destroyed, the destructor calls C<chdir> to revert to the original working
 directory.  By storing the object in a lexical variable with a limited scope,
 this happens automatically at the end of the scope.
 
 This is very handy when working with temporary directories for tasks like
 testing; a function is provided to streamline getting a temporary
-directory from [File::Temp].
+directory from L<File::Temp>.
 
 For convenience, the object stringifies as the canonical form of the absolute
 pathname of the directory entered.
 
-= USAGE
+=head1 USAGE
 
  use File::pushd;
 
-Using File::pushd automatically imports the {pushd} and {tempd} functions.
+Using File::pushd automatically imports the C<pushd> and C<tempd> functions.
 
-== pushd
+=head2 pushd
 
  {
      my $dir = pushd( $target_directory );
  }
 
-Caches the current working directory, calls {chdir} to change to the target
+Caches the current working directory, calls C<chdir> to change to the target
 directory, and returns a File::pushd object.  When the object is
 destroyed, the working directory reverts to the original directory.
 
@@ -180,34 +178,34 @@ called with no arguments, it uses the current directory as its target and
 returns to the current directory when the object is destroyed.
 
 If the target directory does not exist or if the directory change fails
-for some reason, {pushd} will die with an error message.
+for some reason, C<pushd> will die with an error message.
 
 Can be given a hashref as an optional second argument.  The only supported
-option is {untaint_pattern}, which is used to untaint file paths involved.
-It defaults to {qr{^([-+@\w./]+)$}}, which is reasonably restrictive (e.g.
+option is C<untaint_pattern>, which is used to untaint file paths involved.
+It defaults to {qr{^(L<-+@\w./>+)$}}, which is reasonably restrictive (e.g.
 it does not even allow spaces in the path).  Change this to suit your
 circumstances and security needs if running under taint mode. *Note*: you
 must include the parentheses in the pattern to capture the untainted
 portion of the path.
 
-== tempd
+=head2 tempd
 
  {
      my $dir = tempd();
  }
 
-This function is like {pushd} but automatically creates and calls {chdir} to
-a temporary directory created by [File::Temp]. Unlike normal [File::Temp]
+This function is like C<pushd> but automatically creates and calls C<chdir> to
+a temporary directory created by L<File::Temp>. Unlike normal L<File::Temp>
 cleanup which happens at the end of the program, this temporary directory is
-removed when the object is destroyed. (But also see {preserve}.)  A warning
+removed when the object is destroyed. (But also see C<preserve>.)  A warning
 will be issued if the directory cannot be removed.
 
-As with {pushd}, {tempd} will die if {chdir} fails.
+As with C<pushd>, C<tempd> will die if C<chdir> fails.
 
 It may be given a single options hash that will be passed internally
 to C<pushd>.
 
-== preserve
+=head2 preserve
 
  {
      my $dir = tempd();
@@ -216,18 +214,18 @@ to C<pushd>.
  }
 
 Controls whether a temporary directory will be cleaned up when the object is
-destroyed.  With no arguments, {preserve} sets the directory to be preserved.
+destroyed.  With no arguments, C<preserve> sets the directory to be preserved.
 With an argument, the directory will be preserved if the argument is true, or
-marked for cleanup if the argument is false.  Only {tempd} objects may be
-marked for cleanup.  (Target directories to {pushd} are always preserved.)
-{preserve} returns true if the directory will be preserved, and false
+marked for cleanup if the argument is false.  Only C<tempd> objects may be
+marked for cleanup.  (Target directories to C<pushd> are always preserved.)
+C<preserve> returns true if the directory will be preserved, and false
 otherwise.
 
-= SEE ALSO
+=head1 SEE ALSO
 
-* [File::chdir]
-
-=end wikidoc
+=for :list
+* L<File::chdir>
 
 =cut
 
+# vim: ts=4 sts=4 sw=4 et:
