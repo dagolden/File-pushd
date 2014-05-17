@@ -156,6 +156,7 @@ ok( rmtree($temp_dir), "temporary directory manually cleaned up" );
 
 my $program_file = File::Temp->new();
 my $lib          = absdir("lib");
+$lib =~ s{\\}{/}g;
 
 print {$program_file} <<"END_PROGRAM";
 use lib "$lib";
