@@ -5,7 +5,7 @@ requires "File::Path" => "0";
 requires "File::Spec" => "0";
 requires "File::Temp" => "0";
 requires "overload" => "0";
-requires "perl" => "5.008";
+requires "perl" => "5.006";
 requires "strict" => "0";
 requires "warnings" => "0";
 
@@ -28,7 +28,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
-  requires "Dist::Zilla" => "5.014";
+  requires "Dist::Zilla" => "5";
   requires "Dist::Zilla::PluginBundle::DAGOLDEN" => "0.060";
   requires "File::Spec" => "0";
   requires "File::Temp" => "0";
