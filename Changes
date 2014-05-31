@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.007     2014-05-30 23:59:02-04:00 America/New_York
+
     [FIXED]
 
     - Fixed a testing edge case on Windows
