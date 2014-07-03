@@ -2,7 +2,7 @@
 use strict;
 #use warnings;
 
-use Test::More 0.95;
+use Test::More 0.96;
 use File::Path 'rmtree';
 use File::Basename 'dirname';
 use Cwd 'abs_path';

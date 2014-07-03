@@ -2,6 +2,10 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+    [FIXED]
+
+    - s/0.95/0.96/ in t/File_pushd.t
+
 1.008     2014-07-03 13:03:30-04:00 America/New_York
 
     [FIXED]
