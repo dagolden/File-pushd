@@ -2,7 +2,7 @@
 use strict;
 #use warnings;
 
-use Test::More tests => 39;
+use Test::More 0.95;
 use File::Path 'rmtree';
 use File::Basename 'dirname';
 use Cwd 'abs_path';
@@ -225,3 +225,4 @@ is( absdir(), $original_dir, "revert directory when variable goes out of scope" 
 
 ok( -e $expected_dir, "original directory not removed" );
 
+done_testing;
