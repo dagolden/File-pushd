@@ -1,6 +1,7 @@
 Revision history for Perl module File::pushd
 
 {{$NEXT}}
+    - pushd/tempd warn if called in void context (GitHub #9 Olivier Mengué)
 
 1.009     2014-07-03 13:17:48-04:00 America/New_York
 
