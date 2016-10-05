@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.013     2016-10-05 12:57:44-04:00 America/New_York (TRIAL RELEASE)
+
     [TESTING]
 
     - Fixed test failures on some 5.8 perls.
