@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.014     2016-10-09 23:26:19-04:00 America/New_York
+
     - No changes from 1.013-TRIAL.
 
 1.013     2016-10-05 12:57:44-04:00 America/New_York (TRIAL RELEASE)
