@@ -87,6 +87,7 @@ sub tempd {
     eval { $dir = pushd( File::Temp::tempdir( CLEANUP => 0 ), $options ) };
     croak $@ if $@;
     $dir->{_tempd} = 1;
+    $dir->{_owner} = $$;
     return $dir;
 }
 
@@ -116,6 +117,7 @@ sub DESTROY {
     my $orig = $self->{_original};
     chdir $orig if $orig; # should always be so, but just in case...
     if ( $self->{_tempd}
+        && $self->{_owner} == $$
         && !$self->{_preserve} )
     {
         # don't destroy existing $@ if there is no error.
