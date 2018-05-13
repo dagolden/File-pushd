@@ -2,6 +2,8 @@ Revision history for Perl module File::pushd
 
 {{$NEXT}}
 
+1.015     2018-05-13 19:26:26-04:00 America/New_York (TRIAL RELEASE)
+
     [FIXED]
 
     - Directories created with tempd will only be cleaned up by the

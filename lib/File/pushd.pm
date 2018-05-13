@@ -4,7 +4,7 @@ use warnings;
 package File::pushd;
 # ABSTRACT: change directory temporarily for a limited scope
 
-our $VERSION = '1.015';
+our $VERSION = '1.016';
 
 our @EXPORT = qw( pushd tempd );
 our @ISA    = qw( Exporter );
