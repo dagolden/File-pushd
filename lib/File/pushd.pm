@@ -255,6 +255,75 @@ void context and the warnings category C<void> is enabled.
     pushd();
   }
 
+=head1 COMMOM MISTAKES
+
+=head2 Reusing a variable
+
+You should not reuse the same variable.
+
+When the PV is destroyed it's going to switch back to the original location.
+In this example the destruction occurs after the creation of the new object,
+and you would not be where you would expect to be.
+
+ {
+     # DO NOT DO THIS
+     chdir('/start');
+     my $dir = pushd( '/some/where' );
+     ...
+     # then later
+     $dir  = pushd( '/another/directory' );
+     # ..
+     # here you are back to '/start' directory
+ }
+
+You should use multiple scopes
+
+ {
+     # CORRECT WAY TO DO IT
+     chdir('/start');
+     my $dir = pushd( '/some/where' );
+     ...
+     {
+         # then later
+         my $dir  = pushd( '/another/directory' );
+         ...
+     }
+     # ..
+     # here you are back to '/start' directory
+ }
+
+=head2 Use pushd once per scope
+
+As we cannot predict the destruction order of variables, you should not use
+two pushd Objects in the same scope
+
+ # DO NOT DO THIS
+ chdir('/start');
+ {
+     my $dir = pushd( '/some/where' );
+     ...
+     # then later
+     my $second  = pushd( '/another/directory' );
+ }
+ # can not guarantee where you are
+
+You should use multiple scopes
+
+ # CORRECT WAY
+ chdir('/start');
+ {
+     my $dir = pushd( '/some/where' );
+     ...
+     # then later
+     {
+        my $second  = pushd( '/another/directory' );
+        ...
+     }
+     # back to /some/where
+     ...
+ }
+ # you are now back to /start
+
 =head1 SEE ALSO
 
 =for :list
